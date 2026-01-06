@@ -454,7 +454,8 @@
             <section id="home" class="active-section h-[calc(100vh-80px)] flex flex-col justify-center overflow-hidden">
                 <!-- Home section modified to be compact and non-scrollable -->
                 <div class="grid md:grid-cols-2 gap-4 md:gap-10 items-center h-full">
-                    <div class="space-y-3 md:space-y-6 text-center md:text-left flex flex-col justify-center h-full">
+                    <!-- Modified: Removed h-full to allow exact vertical centering of the content block -->
+                    <div class="space-y-3 md:space-y-6 text-center md:text-left flex flex-col justify-center w-full">
                         <!-- Mobile Logo made LARGER as requested -->
                         <div class="md:hidden mb-4 flex justify-center shrink-0">
                             <img src="IAINU.jpg" alt="Class Logo Mobile" 
@@ -482,7 +483,8 @@
                             </button>
                         </div>
                         
-                        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-gray-800 mt-auto md:mt-0 shrink-0">
+                        <!-- Stats: Removed mt-auto to ensure content stays centered together -->
+                        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-gray-800 mt-6 md:mt-0 shrink-0">
                             <div>
                                 <h3 class="text-lg md:text-2xl font-bold text-white">24</h3>
                                 <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Siswa</p>
