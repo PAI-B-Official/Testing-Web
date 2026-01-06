@@ -451,38 +451,42 @@
 
         <main class="flex-grow pt-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
 
-            <section id="home" class="active-section h-[calc(100vh-5rem)] flex flex-col justify-center overflow-hidden">
-                <!-- Home section modified for better centering on mobile -->
-                <div class="grid md:grid-cols-2 gap-4 md:gap-10 items-center h-full max-w-lg mx-auto md:max-w-none">
-                    <div class="flex flex-col justify-center items-center md:items-start h-full w-full space-y-6 md:space-y-8">
-                        <!-- Mobile Logo made LARGER and centered -->
-                        <div class="md:hidden flex justify-center shrink-0">
+            <section id="home" class="active-section h-[calc(100vh-5rem)] w-full flex flex-col justify-center items-center relative overflow-hidden">
+                <!-- Home section fixed for perfect mobile centering -->
+                <div class="grid md:grid-cols-2 gap-6 items-center w-full max-w-lg md:max-w-none mx-auto h-full">
+                    
+                    <!-- Content Wrapper -->
+                    <div class="flex flex-col justify-center items-center md:items-start w-full space-y-5 md:space-y-8 h-full md:h-auto py-4">
+                        
+                        <!-- Mobile Logo (Centered & Balanced) -->
+                        <div class="md:hidden flex justify-center shrink-0 mb-2">
                             <img src="IAINU.jpg" alt="Class Logo Mobile" 
-                                 class="w-48 h-48 object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                                 class="w-40 h-40 object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-float"
                                  onerror="this.style.display='none'">
                         </div>
 
-                        <div class="shrink-0 text-center md:text-left">
+                        <div class="shrink-0 text-center md:text-left space-y-3">
                             <h2 class="text-3xl md:text-6xl font-bold font-tech leading-tight">
                                 WELCOME TO <br>
                                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">FACULTY TARBIYAH</span>
                             </h2>
-                            <p class="text-gray-400 leading-relaxed text-xs md:text-lg mt-4 line-clamp-3 md:line-clamp-none max-w-md mx-auto md:mx-0">
+                            <p class="text-gray-400 leading-relaxed text-xs md:text-lg max-w-md mx-auto md:mx-0 px-2">
                                 "Kami tidak hanya diajarkan cara mentransfer ilmu, tapi juga cara menanamkan adab. Karena ilmu tanpa adab seperti api tanpa kayu bakar."
                             </p>
                         </div>
 
-                        <!-- Buttons with Bigger Mobile Styling -->
-                        <div class="flex gap-4 justify-center md:justify-start shrink-0 w-full md:w-auto">
-                            <button onclick="switchTab('documentation')" class="px-8 py-4 bg-red-700 hover:bg-red-600 rounded-xl text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)] text-lg md:text-base md:px-5 md:py-2 md:rounded-lg">
+                        <!-- Buttons Centered -->
+                        <div class="flex gap-3 justify-center md:justify-start shrink-0 w-full md:w-auto">
+                            <button onclick="switchTab('documentation')" class="px-6 py-3 bg-red-700 hover:bg-red-600 rounded-xl text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)] text-sm md:text-base">
                                 Let's Go !!!
                             </button>
-                            <button onclick="switchTab('structure')" class="px-8 py-4 border-2 border-gray-600 hover:border-red-500 hover:text-red-400 rounded-xl text-gray-300 font-bold transition-all text-lg md:text-base md:px-5 md:py-2 md:rounded-lg md:border">
+                            <button onclick="switchTab('structure')" class="px-6 py-3 border border-gray-600 hover:border-red-500 hover:text-red-400 rounded-xl text-gray-300 font-bold transition-all text-sm md:text-base">
                                 Mahasiswa
                             </button>
                         </div>
                         
-                        <div class="grid grid-cols-3 gap-8 border-t border-gray-800 pt-6 mt-2 shrink-0 w-full md:w-auto">
+                        <!-- Stats Area -->
+                        <div class="grid grid-cols-3 gap-6 border-t border-gray-800 pt-5 mt-2 shrink-0 w-full max-w-xs md:max-w-none mx-auto md:mx-0">
                             <div class="text-center md:text-left">
                                 <h3 class="text-xl md:text-2xl font-bold text-white">24</h3>
                                 <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Siswa</p>
@@ -498,6 +502,7 @@
                         </div>
                     </div>
 
+                    <!-- Desktop Image Column (Right Side) -->
                     <div class="relative animate-float hidden md:flex flex-col justify-center items-center h-full">
                         <div class="flex justify-center mb-6">
                             <img src="IAINU.jpg" alt="Class Logo" 
