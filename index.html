@@ -451,13 +451,13 @@
 
         <main class="flex-grow pt-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
 
-            <section id="home" class="active-section h-[calc(100vh-80px)] flex flex-col justify-center overflow-hidden">
+            <!-- UPDATE: Home Section Centered Vertically for Mobile -->
+            <section id="home" class="active-section min-h-[calc(100vh-5rem)] flex flex-col justify-center">
                 <!-- Home section modified to be compact and non-scrollable -->
-                <div class="grid md:grid-cols-2 gap-4 md:gap-10 items-center h-full">
-                    <!-- Modified: Removed h-full to allow exact vertical centering of the content block -->
-                    <div class="space-y-3 md:space-y-6 text-center md:text-left flex flex-col justify-center w-full">
-                        <!-- Mobile Logo made LARGER as requested -->
-                        <div class="md:hidden mb-4 flex justify-center shrink-0">
+                <div class="grid md:grid-cols-2 gap-4 md:gap-10 items-center w-full">
+                    <div class="space-y-4 md:space-y-6 text-center md:text-left flex flex-col justify-center">
+                        <!-- Mobile Logo -->
+                        <div class="md:hidden flex justify-center shrink-0 mb-2">
                             <img src="IAINU.jpg" alt="Class Logo Mobile" 
                                  class="w-48 h-48 object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
                                  onerror="this.style.display='none'">
@@ -468,23 +468,23 @@
                                 WELCOME TO <br>
                                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">FACULTY TARBIYAH</span>
                             </h2>
-                            <p class="text-gray-400 leading-relaxed text-xs md:text-lg mt-2 md:mt-4 line-clamp-3 md:line-clamp-none">
+                            <p class="text-gray-400 leading-relaxed text-xs md:text-lg mt-2 md:mt-4 line-clamp-3 md:line-clamp-none px-2 md:px-0">
                                 "Kami tidak hanya diajarkan cara mentransfer ilmu, tapi juga cara menanamkan adab. Karena ilmu tanpa adab seperti api tanpa kayu bakar."
                             </p>
                         </div>
 
-                        <!-- Buttons with Bigger Mobile Styling -->
-                        <div class="flex gap-4 pt-2 justify-center md:justify-start shrink-0">
-                            <button onclick="switchTab('documentation')" class="px-8 py-4 bg-red-700 hover:bg-red-600 rounded-xl text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)] text-lg md:text-base md:px-5 md:py-2 md:rounded-lg">
+                        <!-- Buttons -->
+                        <div class="flex gap-4 pt-2 justify-center md:justify-start shrink-0 w-full px-2 md:px-0">
+                            <button onclick="switchTab('documentation')" class="flex-1 md:flex-none px-6 py-3 bg-red-700 hover:bg-red-600 rounded-xl text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)] text-sm md:text-base">
                                 Let's Go !!!
                             </button>
-                            <button onclick="switchTab('structure')" class="px-8 py-4 border-2 border-gray-600 hover:border-red-500 hover:text-red-400 rounded-xl text-gray-300 font-bold transition-all text-lg md:text-base md:px-5 md:py-2 md:rounded-lg md:border">
+                            <button onclick="switchTab('structure')" class="flex-1 md:flex-none px-6 py-3 border-2 border-gray-600 hover:border-red-500 hover:text-red-400 rounded-xl text-gray-300 font-bold transition-all text-sm md:text-base">
                                 Mahasiswa
                             </button>
                         </div>
                         
-                        <!-- Stats: Removed mt-auto to ensure content stays centered together -->
-                        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-gray-800 mt-6 md:mt-0 shrink-0">
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-gray-800 shrink-0 w-full">
                             <div>
                                 <h3 class="text-lg md:text-2xl font-bold text-white">24</h3>
                                 <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Siswa</p>
