@@ -1,62 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta name="google-site-verification" content="pz72A_SOUbG4L7dPVTVI81N2NCn6mhxR7WBHsYVQMho" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kontrol Partikel 3D: PAI B Saturnus (Isometric)</title>
     
-    <title>PAI B IAINU Kebumen Official 2025</title>
-    
-    <meta name="description" content="Website Resmi Kelas PAI B Angkatan 2025 Fakultas Tarbiyah IAINU Kebumen. Galeri, Struktur Organisasi, dan Dokumentasi Kegiatan Mahasiswa.">
-    <meta name="keywords" content="PAI B, IAINU Kebumen, Kelas PAI B 2025, Fakultas Tarbiyah, Mahasiswa Kebumen">
-    <meta name="theme-color" content="#000000">
-    
-    <meta property="og:site_name" content="PAI B Official IAINU Kebumen">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://paib-official.com/"> 
-    <meta property="og:title" content="PAI B Official - IAINU Kebumen">
-    <meta property="og:description" content="Website Resmi Keluarga Besar PAI B 2025. One Heart, One Goal.">
-    <meta property="og:image" content="PAI B.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PAI B Official - IAINU Kebumen">
-    <meta name="twitter:description" content="Website Resmi Keluarga Besar PAI B 2025. One Heart, One Goal.">
-    <meta name="twitter:image" content="PAI B.jpg">
-
-    <meta itemprop="image" content="PAI B.jpg">
-
-    <script type="application/ld+json">
-    [
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "PAI B Official",
-        "url": "https://paib-official.com", 
-        "logo": "PAI B.jpg",
-        "sameAs": [
-          "https://www.instagram.com/iainukebumen/",
-          "https://twitter.com/iainu_kebumen"
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "PAI B Official IAINU Kebumen",
-        "alternateName": ["PAI B 2025", "PAI B Kebumen"],
-        "url": "https://paib-official.com"
-      }
-    ]
-    </script>
-
-    <link rel="icon" type="image/jpeg" href="PAI B.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="PAI B.jpg">
-    
+    <!-- Fonts & Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -65,7 +18,7 @@
                         'crimson-dark': '#1a0505',
                         'crimson-main': '#8a0000',
                         'crimson-light': '#ff1f1f',
-                        'glass': 'rgba(255, 255, 255, 0.05)',
+                        'glass': 'rgba(40, 0, 0, 0.6)',
                     },
                     fontFamily: {
                         'tech': ['Orbitron', 'sans-serif'],
@@ -73,15 +26,6 @@
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'bounce-slow': 'bounce 3s infinite',
-                        'spin-slow': 'spin 3s linear infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
                     }
                 }
             }
@@ -90,1380 +34,846 @@
 
     <style>
         body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             background-color: #0a0000;
             color: #e5e5e5;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            font-family: 'Poppins', sans-serif;
+            touch-action: none;
         }
 
-        /* Hide scrollbar when on home page (handled by JS class) */
-        body.no-scroll {
-            overflow: hidden !important;
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
         }
 
-        /* Custom Scrollbar only for non-mobile devices (min-width: 768px) */
-        @media (min-width: 768px) {
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-            ::-webkit-scrollbar-track {
-                background: #1a0505;
-            }
-            ::-webkit-scrollbar-thumb {
-                background: #8a0000;
-                border-radius: 4px;
-            }
-            ::-webkit-scrollbar-thumb:hover {
-                background: #ff1f1f;
-            }
+        #input-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 240px;
+            transform: scaleX(-1);
+            visibility: hidden; 
         }
 
         .glass-panel {
-            background: rgba(40, 0, 0, 0.6);
-            border: 1px solid rgba(255, 50, 50, 0.1);
+            background: rgba(40, 0, 0, 0.7);
+            border: 1px solid rgba(255, 50, 50, 0.2);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transform: translateZ(0); 
-            -webkit-transform: translateZ(0);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        @media (min-width: 768px) {
-            .glass-panel {
-                background: rgba(40, 0, 0, 0.4);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-            }
-        }
-
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #000000, #2b0000);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
-            will-change: transform, opacity;
-        }
-
-        /* --- PAGE TRANSITION LOADER --- */
-        #page-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 9990; /* High z-index but below auth modal */
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-        }
-        #page-loader.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .hidden-section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .active-section {
-            display: block;
-            animation: fadeIn 0.6s forwards;
-        }
-
-        /* Active Nav Underline Style */
-        .nav-btn.active {
-            color: #ef4444; /* red-500 */
-            position: relative;
-        }
-        .nav-btn.active::after {
-            content: '';
+        #help-container {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
+            top: 24px;
+            left: 24px;
+            z-index: 20;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .neon-text {
-            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #8a0000;
-        }
-
-        /* Modal & Overlay Fixes */
-        .fullscreen-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 0, 0, 0.95);
-            z-index: 100;
-            overflow: auto; /* Scroll both directions if needed */
-            transform: scale(0.9);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity;
-        }
-        
-        .fullscreen-overlay.open {
-            transform: scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .fullscreen-overlay:focus {
-            outline: none;
-        }
-
-        .custom-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9); 
-            z-index: 200;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            will-change: opacity;
-        }
-        .custom-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #bio-content:focus {
-            outline: none;
-        }
-
-        .bio-info-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.25rem; 
-            padding: 0.5rem 0;
-            transition: background-color 0.3s;
-        }
-        .bio-icon-box {
-            flex-shrink: 0;
-            width: 3rem; 
-            height: 3rem; 
+        #help-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(138, 0, 0, 0.2);
+            border: 1px solid rgba(255, 31, 31, 0.4);
             border-radius: 50%;
-            background: rgba(127, 29, 29, 0.2); 
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ef4444; 
-            font-size: 1.25rem; 
-            border: 1px solid rgba(239, 68, 68, 0.1);
-            transition: transform 0.3s, background-color 0.3s, color 0.3s;
-        }
-        .bio-info-row:hover .bio-icon-box {
-            background: #dc2626; 
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
-        }
-        
-        .music-pulse {
-            animation: musicPulse 1.5s infinite;
-        }
-        @keyframes musicPulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #ff1f1f;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 0, 0, 0.3);
         }
 
-        .play-overlay {
+        #help-icon:hover {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: #ff1f1f;
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(255, 31, 31, 0.6);
+            color: white;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 65px;
+            left: 0;
+            width: 300px;
+            max-width: 80vw;
+            padding: 20px;
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            visibility: hidden;
+        }
+
+        #help-container:hover #ui-layer, #help-container:active #ui-layer {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            margin: 0 0 12px 0;
+            color: #ff1f1f;
+            text-shadow: 0 0 10px rgba(255, 31, 31, 0.5);
+            border-bottom: 1px solid rgba(255, 50, 50, 0.2);
+            padding-bottom: 8px;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        ul {
+            padding-left: 0;
+            list-style: none;
+            margin: 10px 0;
+            font-size: 0.85rem;
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+        
+        ul li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        ul li i {
+            width: 24px;
+            text-align: center;
+            margin-right: 10px;
+            color: #ef4444;
+        }
+
+        ul li strong {
+            color: white;
+            margin-right: 5px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 20px;
+            background: #1a0505;
+            color: #9ca3af;
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(138, 0, 0, 0.3);
+            color: #ff1f1f;
+            border-color: rgba(255, 31, 31, 0.5);
+            box-shadow: 0 0 20px rgba(138, 0, 0, 0.3);
+            text-shadow: 0 0 5px rgba(255, 31, 31, 0.5);
+        }
+
+        #loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(220, 38, 38, 0.85);
+            z-index: 20;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            color: #ff1f1f;
+            letter-spacing: 0.15em;
+            text-align: center;
+            width: 100%;
+            pointer-events: auto; 
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 50, 50, 0.1);
+            border-left-color: #ff1f1f;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            transition: transform 0.3s, background-color 0.3s;
-            box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
-            z-index: 10;
-        }
-        .group:hover .play-overlay {
-            background: rgba(255, 255, 255, 0.95);
-            color: #dc2626;
-            transform: translate(-50%, -50%) scale(1.15);
+            animation: spin 1s linear infinite;
         }
 
-        .img-loading-skeleton {
-            position: absolute;
-            inset: 0;
-            background-color: #1f2937; 
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(100px);
             z-index: 0;
-        }
-        .img-loaded {
-            opacity: 1 !important;
+            opacity: 0.2;
         }
 
-        /* Animation for Error Cross */
-        @keyframes drawCross {
-            0% { stroke-dasharray: 0 100; opacity: 0; }
-            50% { opacity: 1; }
-            100% { stroke-dasharray: 100 100; opacity: 1; }
-        }
-        .animate-cross path {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            animation: dash 0.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-        }
-        @keyframes dash {
-            to { stroke-dashoffset: 0; }
-        }
-        .shake-horizontal {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+        #cam-preview {
+            display: none !important;
         }
     </style>
 </head>
-<body class="font-body selection:bg-red-500 selection:text-white" oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+<body>
 
-    <!-- Background Music (Plays after 5s) -->
-    <audio id="bg-music" loop preload="none">
-        <source src="Qolbi Fil Madinah.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <div class="bg-glow bg-red-900 top-[-200px] left-[-200px] animate-pulse-slow"></div>
+    <div class="bg-glow bg-red-800 bottom-[-200px] right-[-200px] animate-pulse-slow"></div>
 
-    <!-- Intro Sound (Plays immediately on click, 5s duration placeholder) -->
-    <audio id="intro-sound" preload="auto">
-        <source src="Fakultas PAI B.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- NEW PAGE TRANSITION LOADER -->
-    <div id="page-loader">
-        <div class="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-red-500 font-tech tracking-widest text-sm animate-pulse">MEMUAT...</p>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div id="loading-text" class="animate-pulse px-4">MEMUAT SISTEM & KAMERA...</div>
+        <button id="start-btn" class="mt-4 px-6 py-2 bg-red-800 hover:bg-red-600 border border-red-500 text-white rounded-lg font-bold hidden transition-colors shadow-[0_0_15px_rgba(255,0,0,0.4)]">
+            <i class="fas fa-camera mr-2"></i> AKTIFKAN KAMERA
+        </button>
     </div>
 
-    <div id="intro-screen">
-        <!-- Intro content unchanged -->
-        <div class="text-center">
-            <h1 class="font-tech text-4xl md:text-7xl font-bold text-white mb-4 tracking-widest neon-text">
-                PRODI <span id="typing-text" class="text-red-500 typing-cursor"></span>
-            </h1>
-            <p class="text-gray-400 text-sm md:text-lg mb-8 font-light tracking-[0.3em]">2025 | GENERATION OF SUCCESS</p>
-            
-            <button onclick="enterSite()" class="group relative px-8 py-3 bg-transparent overflow-hidden rounded-full border border-red-600 transition-all hover:shadow-[0_0_20px_rgba(255,0,0,0.5)]">
-                <span class="relative z-10 text-white font-tech tracking-wider group-hover:text-black transition-colors duration-300">VISIT CLASS</span>
-                <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-red-600"></div>
-            </button>
+    <div id="help-container">
+        <div id="help-icon">?</div>
+        <div id="ui-layer" class="glass-panel">
+            <h1>PANDUAN GESTUR</h1>
+            <ul>
+                <li><i class="fas fa-globe"></i> <span><strong>Saturnus</strong>: Mode Standby</span></li>
+                <li><i class="fas fa-fist-raised"></i> <span><strong>Genggam</strong>: Cincin Berputar Cepat</span></li>
+                <li><i class="fas fa-hand-paper"></i> <span><strong>Buka (5 Jari)</strong>: LEDAKAN TEXT</span></li>
+                <li><i class="fas fa-fingerprint"></i> <span><strong>4 Jari</strong>: "PAI B"</span></li>
+            </ul>
+            <div id="status" class="status-badge">Menunggu Kamera...</div>
         </div>
     </div>
 
-    <div id="main-app" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col">
-        <!-- Nav unchanged -->
-        <nav class="fixed top-0 w-full z-50 glass-panel border-b border-red-900/30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex-shrink-0 cursor-pointer" onclick="switchTab('home')">
-                        <span class="font-tech text-2xl font-bold text-red-500 tracking-tighter">PAI <span class="text-white">B</span></span>
-                    </div>
-                    <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <!-- ADDED IDs back to buttons to fix underline -->
-                            <button id="nav-home" onclick="switchTab('home')" class="nav-btn text-white hover:text-red-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</button>
-                            <button id="nav-structure" onclick="switchTab('structure')" class="nav-btn text-gray-300 hover:text-red-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Structure</button>
-                            <button id="nav-documentation" onclick="switchTab('documentation')" class="nav-btn text-gray-300 hover:text-red-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Documentation</button>
-                            <button id="nav-finance" onclick="switchTab('finance')" class="nav-btn text-gray-300 hover:text-red-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Keuangan</button>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                        <button onclick="toggleMusic()" id="music-btn" class="w-8 h-8 rounded-full bg-red-900/50 flex items-center justify-center text-red-400 border border-red-500/30 hover:bg-red-600 hover:text-white transition-all music-pulse">
-                            <i class="fas fa-music"></i>
-                        </button>
-                        <div class="md:hidden">
-                            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-white p-2">
-                                <i class="fas fa-bars text-xl"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- FIXED MOBILE MENU ANIMATION -->
-            <div id="mobile-menu" class="md:hidden absolute top-16 left-0 w-full bg-black/95 backdrop-blur-md border-b border-red-900/30 overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <button onclick="switchTab('home')" class="text-gray-300 hover:text-red-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left">Home</button>
-                    <button onclick="switchTab('structure')" class="text-gray-300 hover:text-red-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left">Structure</button>
-                    <button onclick="switchTab('documentation')" class="text-gray-300 hover:text-red-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left">Documentation</button>
-                    <button onclick="switchTab('finance')" class="text-gray-300 hover:text-red-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left">Keuangan</button>
-                </div>
-            </div>
-        </nav>
+    <div id="cam-preview"></div>
+    <video id="input-video" playsinline autoplay muted></video>
+    <div id="canvas-container"></div>
 
-        <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-            <div class="absolute inset-0 bg-gradient-to-b from-black via-[#1a0000] to-black opacity-80"></div>
-            
-            <div class="hidden md:block absolute top-[-10%] left-[-10%] w-96 h-96 bg-red-900 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-pulse-slow" style="will-change: transform, opacity;"></div>
-            <div class="hidden md:block absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-red-800 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-pulse-slow" style="will-change: transform, opacity;"></div>
-        </div>
-
-        <main class="flex-grow pt-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
-
-            <section id="home" class="active-section min-h-[calc(100vh-5rem)] flex flex-col justify-start md:justify-center overflow-hidden">
-                <!-- Home section modified for better centering on mobile -->
-                <div class="grid md:grid-cols-2 gap-4 md:gap-10 items-start md:items-center h-full max-w-lg mx-auto md:max-w-none pt-4 md:pt-0">
-                    <div class="flex flex-col justify-start md:justify-center items-center md:items-start h-full w-full space-y-5 md:space-y-8">
-                        <!-- Mobile Logo made LARGER and centered -->
-                        <div class="md:hidden flex justify-center shrink-0 mb-2">
-                            <img src="IAINU.jpg" alt="Class Logo Mobile" 
-                                 class="w-60 h-60 object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"
-                                 onerror="this.style.display='none'">
-                        </div>
-
-                        <div class="shrink-0 text-center md:text-left">
-                            <h2 class="text-3xl md:text-6xl font-bold font-tech leading-tight">
-                                WELCOME TO <br>
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">FACULTY TARBIYAH</span>
-                            </h2>
-                            <p class="text-gray-400 leading-relaxed text-xs md:text-lg mt-4 md:text-justify max-w-md mx-auto md:mx-0">
-                                "Dalam lingkungan pendidikan, seorang pendidik adalah tenaga profesional berfungsi menjembatani ajaran klasik dengan realita kehidupan modern yang dinamis. wajib memiliki kompetensi ganda, yaitu penguasaan materi mendalam serta keterampilan mengajar yang efektif."
-                            </p>
-                        </div>
-
-                        <!-- Buttons with Bigger Mobile Styling -->
-                        <div class="flex gap-4 justify-center md:justify-start shrink-0 w-full md:w-auto">
-                            <button onclick="switchTab('documentation')" class="px-8 py-3 bg-red-700 hover:bg-red-600 rounded-xl text-white font-bold transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)] text-sm md:text-base md:px-5 md:py-2 md:rounded-lg">
-                                Let's Go !!!
-                            </button>
-                            <button onclick="switchTab('structure')" class="px-8 py-3 border-2 border-gray-600 hover:border-red-500 hover:text-red-400 rounded-xl text-gray-300 font-bold transition-all text-sm md:text-base md:px-5 md:py-2 md:rounded-lg md:border">
-                                Mahasiswa
-                            </button>
-                        </div>
-                        
-                        <div class="grid grid-cols-3 gap-8 border-t border-gray-800 pt-6 mt-2 shrink-0 w-full md:w-auto">
-                            <div class="text-center md:text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-white">24</h3>
-                                <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Siswa</p>
-                            </div>
-                            <div class="text-center md:text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-white">6</h3>
-                                <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Laki-laki</p>
-                            </div>
-                            <div class="text-center md:text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-white">18</h3>
-                                <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Perempuan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative animate-float hidden md:flex flex-col justify-center items-center h-full">
-                        <div class="flex justify-center mb-6">
-                            <img src="IAINU.jpg" alt="Class Logo" 
-                                 class="w-32 h-32 object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:scale-110 transition-transform duration-300"
-                                 onerror="this.onerror=null; this.src='IAINU.jpg';">
-                        </div>
-
-                        <div class="glass-panel p-8 rounded-2xl transform rotate-3 hover:rotate-0 transition-all duration-500 border border-red-500/20 max-w-md">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-black flex items-center justify-center">
-                                    <i class="fas fa-quote-left text-white"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-lg">Motto Kelas</h4>
-                                    <p class="text-xs text-red-400">Since 2025</p>
-                                </div>
-                            </div>
-                            <blockquote class="text-xl font-light italic text-gray-300 mb-6">
-                                "Microteaching itu memang mendebarkan, tapi lebih mendebarkan lagi kalau melihat generasi muda rusak karena kurangnya pendidikan karakter."
-                            </blockquote>
-                            <div class="flex justify-between items-center text-sm text-gray-500">
-                                <span>PAI B Family</span>
-                                <i class="fas fa-fingerprint text-red-500 text-2xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="structure" class="hidden-section py-10 relative min-h-[calc(100vh-80px)] flex flex-col justify-center items-center">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-5xl font-tech font-bold text-white mb-2">STRUKTUR KELAS</h2>
-                    <div class="h-1 w-20 bg-red-600 mx-auto rounded-full"></div>
-                </div>
-
-                <div class="flex flex-col gap-8 items-center justify-center w-full max-w-md mx-auto">
-                    <!-- Organization Button (Red Gradient) -->
-                    <a href="https://pai-b-official.github.io/Structure-Class-PAI-B/" target="_blank" class="w-full group relative px-10 py-6 bg-gradient-to-r from-red-900 to-black overflow-hidden rounded-2xl border border-red-600/50 shadow-[0_0_30px_rgba(220,38,38,0.2)] hover:shadow-[0_0_50px_rgba(220,38,38,0.6)] transition-all duration-300 text-center transform hover:scale-105">
-                        <div class="flex flex-col items-center gap-3 relative z-10">
-                            <i class="fas fa-sitemap text-4xl text-red-400 group-hover:text-white transition-colors"></i>
-                            <span class="font-tech text-2xl font-bold text-white tracking-widest">ORGANIZE PAI B</span>
-                            <span class="text-xs text-gray-400 uppercase tracking-wider">Klik untuk melihat struktur PAI B</span>
-                        </div>
-                        <div class="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                    </a>
-
-                    <!-- Family Button (Blue Gradient) -->
-                    <button onclick="toggleFamilyGallery()" class="w-full group relative px-10 py-6 bg-gradient-to-r from-blue-900 to-black overflow-hidden rounded-2xl border border-blue-600/50 shadow-[0_0_30px_rgba(37,99,235,0.2)] hover:shadow-[0_0_50px_rgba(37,99,235,0.6)] transition-all duration-300 text-center transform hover:scale-105">
-                        <div class="flex flex-col items-center gap-3 relative z-10">
-                            <i class="fas fa-users text-4xl text-blue-400 group-hover:text-white transition-colors"></i>
-                            <span class="font-tech text-2xl font-bold text-white tracking-widest">FAMILY PAI B</span>
-                            <span class="text-xs text-gray-400 uppercase tracking-wider">KLIK UNTUK MELIHAT KELUARGA PAI B</span>
-                        </div>
-                        <div class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                    </button>
-                </div>
-            </section>
-
-            <section id="documentation" class="hidden-section py-10">
-                <!-- Doc section unchanged -->
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-5xl font-tech font-bold text-white mb-2">ARCHIVES</h2>
-                    <div class="h-1 w-20 bg-red-600 mx-auto rounded-full mb-4"></div>
-                    <p class="text-gray-400 mb-6">Class Memories & Moments</p>
-                    
-                    <div class="flex flex-col md:flex-row justify-center items-center gap-3 max-w-xl mx-auto">
-                        <div class="relative w-full">
-                            <input type="text" id="doc-search" placeholder="Search by title..." 
-                                   onkeyup="handleSearch(event)"
-                                   class="w-full bg-black/40 border border-red-500/30 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 placeholder-gray-500 transition-all text-center md:text-left">
-                            <button onclick="handleSearch({key: 'Enter'})" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                        <button onclick="openAllFiles()" class="w-full md:w-auto bg-red-900/30 hover:bg-red-800 border border-red-500/50 text-white px-6 py-2 rounded-lg text-sm transition-all whitespace-nowrap flex items-center justify-center gap-2">
-                            <i class="fas fa-th-large"></i> All Files
-                        </button>
-                    </div>
-                </div>
-
-                <div id="documentation-grid" class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-                </div>
-            </section>
-
-            <!-- FINANCE SECTION -->
-            <section id="finance" class="hidden-section py-10 min-h-[600px] flex justify-center items-center">
-                
-                <!-- LOGIN CONTAINER -->
-                <div id="finance-login" class="max-w-md w-full px-4">
-                    <div class="glass-panel p-8 rounded-2xl border border-red-500/30">
-                        <div class="text-center mb-8">
-                            <div class="w-16 h-16 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500">
-                                <i class="fas fa-lock text-red-400 text-2xl"></i>
-                            </div>
-                            <h2 class="text-2xl font-bold text-white font-tech tracking-wider">SECURE ACCESS</h2>
-                            <p class="text-gray-400 text-sm mt-2">Masuk untuk melihat data keuangan</p>
-                        </div>
-
-                        <form onsubmit="handleFinanceLogin(event)" class="space-y-6">
-                            <div>
-                                <label class="block text-gray-400 text-xs uppercase tracking-wider mb-2">Username</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-user text-gray-500"></i>
-                                    </div>
-                                    <input type="text" id="finance-user" class="w-full bg-black/50 border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" placeholder="Enter username">
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-400 text-xs uppercase tracking-wider mb-2">Password</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-key text-gray-500"></i>
-                                    </div>
-                                    <input type="password" id="finance-pass" class="w-full bg-black/50 border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" placeholder="••••••••">
-                                </div>
-                                <p id="pass-error-msg" class="text-red-500 text-xs mt-2 hidden flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i> Data tidak Valid
-                                </p>
-                            </div>
-
-                            <button type="submit" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 rounded-lg transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)]">
-                                LOGIN
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- DASHBOARD CONTENT REMOVED -->
-
-            </section>
-
-        </main>
-
-        <footer id="main-footer" class="border-t border-red-900/30 bg-black/90 mt-12 pt-12 pb-8 hidden">
-            <!-- Footer unchanged -->
-            <div class="max-w-7xl mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8 border-b border-red-900/30 pb-8">
-                    <div class="text-left">
-                         <h3 class="font-tech text-xl text-white font-bold mb-4 border-b-2 border-red-600 inline-block pb-1">FAKULTAS TARBIYAH</h3>
-                         <p class="text-gray-400 text-sm leading-relaxed mt-2">
-                             Mencetak pendidik yang berakhlak mulia, berwawasan luas, dan kompeten dalam menjawab tantangan zaman.
-                         </p>
-                    </div>
-                    <div class="text-left">
-                        <h3 class="font-tech text-xl text-white font-bold mb-4 border-b-2 border-red-600 inline-block pb-1">KONTAK KAMI</h3>
-                        <div class="mt-2 flex flex-col gap-2">
-                            <a href="https://maps.app.goo.gl/tfdwTJTneTn89ey36" target="_blank" class="text-gray-400 text-sm flex items-center hover:text-white transition-colors group">
-                                <i class="fas fa-map-marker-alt text-red-500 w-6 text-center mr-2 group-hover:scale-110 transition-transform"></i> 
-                                Jl. Tentara Pelajar No. 55B
-                            </a>
-                            <a href="https://wa.me/6281216024273" target="_blank" class="text-gray-400 text-sm flex items-center hover:text-white transition-colors group">
-                                <i class="fas fa-phone text-red-500 w-6 text-center mr-2 group-hover:scale-110 transition-transform"></i> 
-                                0812-1602-4273
-                            </a>
-                            <a href="https://twitter.com/iainu_kebumen" target="_blank" class="text-gray-400 text-sm flex items-center hover:text-white transition-colors group">
-                                <i class="fab fa-twitter text-red-500 w-6 text-center mr-2 group-hover:scale-110 transition-transform"></i> 
-                                @iainu_kebumen
-                            </a>
-                        </div>
-                    </div>
-                    <div class="text-left">
-                        <h3 class="font-tech text-xl text-white font-bold mb-4 border-b-2 border-red-600 inline-block pb-1">AKADEMIK</h3>
-                        <div class="mt-2">
-                            <p class="text-gray-400 text-sm mb-2"><i class="fas fa-graduation-cap text-red-500 mr-2"></i> Pendidikan Agama Islam</p>
-                            <p class="text-gray-400 text-sm mb-2"><i class="fas fa-calendar-alt text-red-500 mr-2"></i> Angkatan 2025</p>
-                            <p class="text-gray-400 text-sm"><i class="fas fa-users text-red-500 mr-2"></i> Kelas B</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="font-tech text-gray-500 text-sm text-center md:text-left">© 2025 PAI B - IAINU KEBUMEN. All Rights Reserved.</p>
-                    <div class="flex gap-4">
-                        <a href="https://www.instagram.com/iainukebumen/" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition-all duration-300">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://iainu-kebumen.ac.id/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnQrL_efXSleeESFYk2QKkN6BzFcbkVuHqkuvpD0AKrYYmzGs-kkm7mzH8qUk_aem_h2VNO5wVlciA0OHIwGrFxg" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-500 hover:text-white transition-all duration-300">
-                            <i class="fas fa-globe"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Modals (Family Gallery, All Files, Bio, Media, Team Executor) -->
-    
-    <!-- AUTH FAILED MODAL -->
-    <div id="auth-error-modal" class="custom-modal" style="z-index: 9999;">
-        <div class="bg-black/90 border border-red-600 rounded-xl p-8 max-w-sm w-full mx-4 text-center transform scale-100 shadow-[0_0_50px_rgba(220,38,38,0.5)]">
-            <div class="mb-4 flex justify-center">
-                <!-- X Icon Animation -->
-                <svg class="w-20 h-20 text-red-600 animate-cross" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-white mb-2 font-tech">AUTHORIZATION FAILED</h3>
-            <p class="text-gray-400 text-sm mb-6">Silahkan masukan data yang valid untuk melanjutkan.</p>
-            <button onclick="closeAuthError()" class="bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-sm font-bold transition-colors w-full">
-                COBA LAGI
-            </button>
-        </div>
-    </div>
-
-    <!-- TEAM EXECUTOR MODAL -->
-    <div id="team-executor-modal" class="fullscreen-overlay" tabindex="0">
-        <div class="w-full min-h-screen pt-20 pb-10 px-4 relative">
-             <button onclick="toggleTeamExecutor()" class="fixed top-6 right-6 z-50 bg-red-600 text-white w-12 h-12 rounded-full hover:bg-red-500 transition flex items-center justify-center text-xl shadow-lg border-2 border-black">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <div class="text-center mb-8 sticky left-0 right-0">
-                <h2 class="text-3xl md:text-5xl font-tech font-bold text-white mb-2">TEAM EXECUTOR</h2>
-                <p class="text-red-400 text-sm tracking-widest">DIVISI & PELAKSANA</p>
-            </div>
-
-            <!-- Executor Content Container -->
-            <!-- ADDED: overflow-auto here allows panning around the tree -->
-            <div class="w-full overflow-y-auto overflow-x-auto pb-12">
-                 <!-- ADDED: min-w-max forces the container to be as wide as the tree requires -->
-                 <div id="executor-tree-container" class="tree">
-                    <!-- Tree injected via JS -->
-                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="family-gallery" class="fullscreen-overlay" tabindex="0">
-        <!-- Family Gallery Content unchanged -->
-        <div class="max-w-7xl mx-auto px-4 pt-24 pb-10 relative">
-            <button onclick="toggleFamilyGallery()" class="fixed top-6 right-6 z-50 bg-red-600 text-white w-12 h-12 rounded-full hover:bg-red-500 transition flex items-center justify-center text-xl shadow-lg border-2 border-black">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-6xl font-tech font-bold text-white mb-2">KELUARGA PAI B</h2>
-                <p class="text-red-400 text-lg">Selalu di Hati</p>
-            </div>
-            <div id="student-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"></div>
-        </div>
-    </div>
-
-    <div id="all-files-overlay" class="fullscreen-overlay" tabindex="0">
-         <!-- All Files Content unchanged -->
-        <div class="max-w-7xl mx-auto px-4 pt-24 pb-10 relative">
-            <button onclick="closeAllFiles()" class="fixed top-6 right-6 z-50 bg-red-600 text-white w-12 h-12 rounded-full hover:bg-red-500 transition flex items-center justify-center text-xl shadow-lg border-2 border-black">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-tech font-bold text-white mb-2">ALL UPLOADED FILES</h2>
-                <p class="text-gray-400 text-sm">Memories Activities PAI B 2025</p>
-            </div>
-
-            <div id="all-files-grid" class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            </div>
-        </div>
-    </div>
-
-    <!-- Bio Modal & Media Modal unchanged -->
-    <div id="bio-modal" class="custom-modal" onclick="closeBioModal(event)">
-        <div id="bio-content" class="glass-panel w-[90%] md:w-full max-w-6xl max-h-[90vh] md:max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300 rounded-2xl flex flex-col md:flex-row bg-black/90 border border-red-500/30 shadow-2xl relative overflow-hidden" tabindex="0">
-            <div class="w-full md:w-5/12 aspect-[9/16] relative bg-gray-900 group shrink-0">
-                <div id="modal-img-loader" class="img-loading-skeleton">
-                    <i class="fas fa-spinner fa-spin text-red-900 text-4xl"></i>
-                </div>
-                <img id="modal-img" src="" alt="Profile Photo" class="relative z-10 w-full h-full object-cover transition-opacity duration-500 opacity-0" onerror="this.src='https://placehold.co/400x500?text=No+Image';">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/90 z-20 pointer-events-none"></div>
-                <button onclick="closeBioModal(null, true)" class="md:hidden absolute top-4 right-4 z-50 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="w-full md:w-7/12 p-6 md:p-10 flex flex-col justify-center text-left relative bg-black/50 md:bg-transparent">
-                <div class="absolute top-0 right-0 p-6 opacity-10 hidden md:block">
-                    <i class="fas fa-fingerprint text-9xl text-red-600"></i>
-                </div>
-                <div class="mb-6 md:mb-10 relative z-10">
-                    <h2 id="modal-name" class="text-2xl md:text-6xl font-bold text-white font-tech mb-2 tracking-wide leading-tight drop-shadow-lg">Name Here</h2>
-                    <div class="flex items-center gap-3">
-                        <span class="px-4 py-1 bg-red-900/40 border border-red-500/30 rounded text-red-400 font-mono text-xs md:text-base tracking-wider" id="modal-nim">NIM: 00000000</span>
-                    </div>
-                </div>
-                <div class="space-y-6 relative z-10">
-                    <div class="bio-info-row group">
-                        <div class="bio-icon-box w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl">
-                            <i class="fab fa-instagram"></i>
-                        </div>
-                        <div class="flex-grow pt-1 md:pt-2">
-                            <span class="text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em] font-bold block mb-1">Instagram</span>
-                            <div id="modal-ig" class="text-sm md:text-xl"></div>
-                        </div>
-                    </div>
-                    <div class="bio-info-row group">
-                        <div class="bio-icon-box w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <div class="flex-grow pt-1 md:pt-2">
-                            <span class="text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em] font-bold block mb-1">About Me</span>
-                            <p id="modal-bio" class="text-gray-300 font-light leading-relaxed text-sm md:text-xl italic pr-2 md:pr-8 text-justify">"..."</p>
-                        </div>
-                    </div>
-                </div>
-                 <button onclick="closeBioModal(null, true)" class="hidden md:flex absolute top-6 right-6 z-50 bg-transparent text-white/50 hover:text-white transition w-10 h-10 items-center justify-center text-2xl">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="media-modal" class="custom-modal" onclick="closeMediaModal(event)">
-        <div class="relative max-w-5xl w-full mx-4 flex justify-center">
-            <button onclick="closeMediaModal(null, true)" class="absolute -top-12 right-0 md:-right-12 text-white hover:text-red-500 text-3xl transition z-50">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="media-container" class="max-h-[85vh] rounded-lg shadow-2xl border border-red-500/30">
-            </div>
-        </div>
-    </div>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <script>
-        // Existing Scripts
-        const textToType = "PAI B";
-        const typingElement = document.getElementById('typing-text');
-        let i = 0;
+        // --- CONFIGURATION ---
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        function typeWriter() {
-            if (i < textToType.length) {
-                typingElement.innerHTML += textToType.charAt(i);
-                i++;
-                setTimeout(typeWriter, 150);
+        const CONFIG = {
+            particleCount: isMobile ? 8000 : 16000, 
+            sphereRatio: 0.6, 
+            textScale: 0.22,
+            colors: {
+                saturnMain: new THREE.Color(0xE6DBA6), 
+                saturnBand1: new THREE.Color(0xD9C789), 
+                saturnBand2: new THREE.Color(0xBFA56E), 
+                ringBright: new THREE.Color(0xFFFFFF), 
+                ringDim: new THREE.Color(0xAAAAAA), 
+
+                gold: new THREE.Color(0xff1f1f), 
+                text: new THREE.Color(0xff1f1f), 
+                explode: new THREE.Color(0x8a0000),
+                brightWhite: new THREE.Color(0xFFFFFF)
             }
-        }
-
-        window.onload = function() {
-            typeWriter();
-            generateStudents(); 
-            initDocumentation(); 
-            
-            // --- FIX: Prevent Autoplay ---
-            const bgMusic = document.getElementById('bg-music');
-            if(bgMusic) {
-                bgMusic.pause();
-                bgMusic.currentTime = 0;
-            }
-
-            // Initial call to set footer/scroll state based on default page 'home'
-            _switchTabUI('home');
-
-            if (!history.state) {
-                history.replaceState({ page: 'home' }, '', '#home');
-            }
-            
-            // SECURITY: Disable keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
-                // Prevent F12
-                if (e.key === 'F12') { e.preventDefault(); return false; }
-                // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-                if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
-                // Prevent Ctrl+U (View Source)
-                if (e.ctrlKey && e.key === 'u') { e.preventDefault(); return false; }
-                // Prevent Ctrl+S (Save Page)
-                if (e.ctrlKey && e.key === 's') { e.preventDefault(); return false; }
-            });
-
-            // SECURITY: Simple debugger trap
-            setInterval(() => {
-                const start = new Date().getTime();
-                debugger;
-                const end = new Date().getTime();
-            }, 1000);
-            
-            // Close mobile menu on outside click
-            document.addEventListener('click', (e) => {
-                const menu = document.getElementById('mobile-menu');
-                const btn = document.getElementById('mobile-menu-btn');
-                
-                // If menu is open (check for max-h-screen class)
-                if (menu && menu.classList.contains('max-h-screen')) {
-                    // If click target is NOT inside the menu AND NOT the button itself
-                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                        toggleMobileMenu(); // Use function to animate close
-                    }
-                }
-            });
         };
 
-        // Standard Functions (enterSite, toggleMusic, switchTab, toggleMobileMenu) unchanged
-        function enterSite() {
-            const intro = document.getElementById('intro-screen');
-            const mainApp = document.getElementById('main-app');
-            const bgMusic = document.getElementById('bg-music');
-            const introSound = document.getElementById('intro-sound');
+        const STATE = {
+            mode: 'SATURN',
+            handPresent: false,
+            hasOpenedLink: false,
+            explodeStartTime: null,
+            hasResetForText: false
+        };
 
-            // 1. Mainkan Sound Intro (Durasi 5 detik)
-            if (introSound) {
-                introSound.play().catch(e => console.log("Intro sound blocked", e));
+        // Separate shapes for Sphere and Ring
+        const TARGETS = {
+            sphere: {
+                default: [],
+                p: [], pa: [], pai: [], paib: [], 
+                mixed: [], // Hybrid Text + Debris
+                chaos: []
+            },
+            ring: {
+                default: [],
+                p: [], pa: [], pai: [], paib: [], 
+                mixed: [], // Hybrid Text + Debris
+                chaos: []
+            },
+            colors: {
+                sphere: [],
+                ring: [],
+                mixed: []
             }
+        };
 
-            // 2. Animasi Membuka Halaman (Langsung jalan, tidak stuck)
-            intro.style.transform = 'translateY(-100%)';
-            intro.style.opacity = '0';
-            mainApp.classList.remove('hidden');
+        const statusEl = document.getElementById('status');
+        const loadingEl = document.getElementById('loading');
+        const loadingText = document.getElementById('loading-text');
+        const startBtn = document.getElementById('start-btn');
+        
+        let scene, camera, renderer;
+        let sphereMesh, ringMesh, particleGroup;
+        let clock = new THREE.Clock();
+
+        // --- 1. TEXT GENERATION SYSTEM ---
+        
+        function generateTextPoints(text, isMultiline = false) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
             
-            // Fade in content
-            setTimeout(() => {
-                mainApp.style.opacity = '1';
-            }, 100);
+            canvas.width = 600; 
+            canvas.height = 300; 
+            
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
 
-            // Hapus elemen intro setelah animasi CSS selesai (0.8s)
-            setTimeout(() => { 
-                intro.style.display = 'none'; 
-            }, 800);
-
-            // 3. Mainkan Lagu Utama setelah 5 detik
-            setTimeout(() => {
-                if (bgMusic) {
-                    bgMusic.play().catch(error => { console.log("Main music autoplay blocked:", error); });
-                }
-            }, 5000); 
-        }
-
-        let isPlaying = true;
-        function toggleMusic() {
-            const audio = document.getElementById('bg-music');
-            const btn = document.getElementById('music-btn');
-            if (isPlaying) {
-                audio.pause();
-                btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                btn.classList.remove('music-pulse');
-                isPlaying = false;
+            if (isMultiline) {
+                ctx.font = '900 75px "Orbitron", Arial';
+                ctx.fillText("WELCOME TO", canvas.width / 2, 70);
+                ctx.fillText("SEMESTER II", canvas.width / 2, 160);
+                ctx.fillText("GUYS :)", canvas.width / 2, 250);
             } else {
-                audio.play();
-                btn.innerHTML = '<i class="fas fa-music"></i>';
-                btn.classList.add('music-pulse');
-                isPlaying = true;
+                ctx.font = '900 180px "Orbitron", Arial'; 
+                ctx.fillText(text, canvas.width / 2, canvas.height / 2);
             }
-        }
 
-        // --- NEW: Visibility Change Listener ---
-        document.addEventListener('visibilitychange', function() {
-            const audio = document.getElementById('bg-music');
-            if (document.hidden) {
-                // If minimized/tab switched away, pause
-                if (audio) audio.pause();
-            } else {
-                // If back to tab, resume only if it was supposed to be playing
-                if(isPlaying && audio) {
-                    audio.play().catch(e => console.log("Resume prevented", e));
-                }
-            }
-        });
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const points = [];
 
-        function switchTab(tabId) {
-            // 1. Show Loader
-            const loader = document.getElementById('page-loader');
-            loader.classList.remove('opacity-0', 'pointer-events-none');
-            loader.classList.add('active'); 
-
-            // 2. Wait for visual effect
-            setTimeout(() => {
-                // 3. Switch UI (The existing logic)
-                _switchTabUI(tabId);
-                
-                // 4. Scroll to top
-                window.scrollTo(0, 0);
-                
-                // 5. Update History
-                history.pushState({ page: tabId }, '', '#' + tabId);
-                
-                // 6. Hide Loader after a slight delay
-                setTimeout(() => {
-                    loader.classList.remove('active');
-                    loader.classList.add('opacity-0', 'pointer-events-none');
-                }, 300);
-                
-            }, 500); 
-        }
-
-        function _switchTabUI(tabId) {
-            // Update Active Nav Style
-            const navIds = ['home', 'structure', 'documentation', 'finance'];
-            navIds.forEach(id => {
-                const btn = document.getElementById('nav-' + id);
-                if (btn) {
-                    if (id === tabId) {
-                        btn.classList.add('active', 'text-white');
-                        btn.classList.remove('text-gray-300');
-                    } else {
-                        btn.classList.remove('active', 'text-white');
-                        btn.classList.add('text-gray-300');
+            const step = 3; 
+            for (let y = 0; y < canvas.height; y += step) { 
+                for (let x = 0; x < canvas.width; x += step) {
+                    const index = (y * canvas.width + x) * 4;
+                    if (data[index] > 128) {
+                        points.push({
+                            x: (x - canvas.width / 2) * CONFIG.textScale,
+                            y: -(y - canvas.height / 2) * CONFIG.textScale,
+                            z: 0
+                        });
                     }
                 }
-            });
-
-            // Handle Footer Visibility & Scroll
-            const footer = document.getElementById('main-footer');
-            const body = document.body;
-
-            if (tabId === 'home') {
-                footer.style.display = 'none'; // Hide footer
-                body.classList.add('no-scroll'); // Disable scroll
-            } else {
-                footer.style.display = 'block'; // Show footer
-                body.classList.remove('no-scroll'); // Enable scroll
             }
+            return points;
+        }
 
-            const sections = document.querySelectorAll('main section');
-            sections.forEach(section => {
-                section.classList.remove('active-section');
-                section.classList.add('hidden-section');
-                section.style.display = 'none'; 
-            });
+        // --- 2. PRE-CALCULATE SHAPES ---
 
-            const target = document.getElementById(tabId);
-            if (target) {
-                if (tabId === 'finance') {
-                    target.style.display = 'flex';
-                } else if (tabId === 'home') {
-                    // For home, use flex to center content vertically
-                    target.style.display = 'flex'; 
+        function initShapes() {
+            const sphereCount = Math.floor(CONFIG.particleCount * CONFIG.sphereRatio);
+            const ringCount = CONFIG.particleCount - sphereCount;
+            const welcomePoints = generateTextPoints("dummy", true); // Pre-generate for Mixed
+
+            const getSaturnColor = (phi) => {
+                const nPhi = phi / Math.PI;
+                if (nPhi < 0.1 || nPhi > 0.9) return CONFIG.colors.saturnBand2;
+                if ((nPhi > 0.3 && nPhi < 0.4) || (nPhi > 0.6 && nPhi < 0.7)) return CONFIG.colors.saturnBand1;
+                return CONFIG.colors.saturnMain;
+            };
+
+            // --- 1. SPHERE TARGETS ---
+            for (let i = 0; i < sphereCount; i++) {
+                // Default Saturn
+                const r = 24; 
+                const theta = Math.random() * Math.PI * 2; 
+                const phi = Math.acos((Math.random() * 2) - 1); 
+                const rNoise = r + (Math.random() - 0.5) * 1.0;
+                const x = rNoise * Math.sin(phi) * Math.cos(theta);
+                const y = rNoise * Math.sin(phi) * Math.sin(theta);
+                const z = rNoise * Math.cos(phi);
+                TARGETS.sphere.default.push(x, y, z);
+
+                const col = getSaturnColor(phi);
+                const v = Math.random() * 0.1;
+                TARGETS.colors.sphere.push(col.r + v, col.g + v, col.b + v);
+
+                // Chaos (Explosion)
+                const chaosR = 200 + Math.random() * 200;
+                const chaosTheta = Math.random() * Math.PI * 2;
+                const chaosPhi = Math.acos((Math.random() * 2) - 1);
+                const cx = chaosR * Math.sin(chaosPhi) * Math.cos(chaosTheta);
+                const cy = chaosR * Math.sin(chaosPhi) * Math.sin(chaosTheta);
+                const cz = chaosR * Math.cos(chaosPhi);
+                TARGETS.sphere.chaos.push(cx, cy, cz);
+
+                // Mixed (Text + Debris)
+                // 20% particles stay as chaos debris, 80% become text
+                if (i % 5 === 0) { 
+                    // Debris
+                    TARGETS.sphere.mixed.push(cx, cy, cz); 
                 } else {
-                    target.style.display = 'block';
+                    // Text
+                    const pt = welcomePoints.length > 0 ? welcomePoints[i % welcomePoints.length] : {x:0, y:0, z:0};
+                    TARGETS.sphere.mixed.push(pt.x, pt.y, pt.z);
                 }
-                
-                requestAnimationFrame(() => {
-                    target.classList.remove('hidden-section');
-                    target.classList.add('active-section');
-                });
             }
+
+            // --- 2. RING TARGETS ---
+            const ringInner = 30;
+            const ringOuter = 55;
+
+            for (let i = 0; i < ringCount; i++) {
+                // Default Saturn
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.sqrt(Math.random()) * (ringOuter - ringInner) + ringInner;
+                const x = radius * Math.cos(angle);
+                const z = radius * Math.sin(angle);
+                const y = (Math.random() - 0.5) * 3.0; 
+                TARGETS.ring.default.push(x, y, z);
+
+                const nRadius = (radius - ringInner) / (ringOuter - ringInner);
+                let col = CONFIG.colors.ringBright;
+                if (nRadius > 0.6 && nRadius < 0.7) col = CONFIG.colors.ringDim;
+                if (nRadius < 0.3) col = new THREE.Color().lerpColors(CONFIG.colors.ringDim, CONFIG.colors.ringBright, nRadius/0.3);
+                const v = Math.random() * 0.1;
+                TARGETS.colors.ring.push(col.r + v, col.g + v, col.b + v);
+
+                // Chaos (Explosion)
+                const chaosR = 250 + Math.random() * 250;
+                const chaosTheta = Math.random() * Math.PI * 2;
+                const chaosPhi = Math.acos((Math.random() * 2) - 1);
+                const cx = chaosR * Math.sin(chaosPhi) * Math.cos(chaosTheta);
+                const cy = chaosR * Math.sin(chaosPhi) * Math.sin(chaosTheta);
+                const cz = chaosR * Math.cos(chaosPhi);
+                TARGETS.ring.chaos.push(cx, cy, cz);
+
+                // Mixed (Text + Debris)
+                if (i % 5 === 0) {
+                    // Debris
+                    TARGETS.ring.mixed.push(cx, cy, cz);
+                } else {
+                    // Text (Shift index by sphereCount to continue mapping)
+                    const pt = welcomePoints.length > 0 ? welcomePoints[(i + sphereCount) % welcomePoints.length] : {x:0, y:0, z:0};
+                    TARGETS.ring.mixed.push(pt.x, pt.y, pt.z);
+                }
+            }
+
+            function assignTextTargets(key, points) {
+                const pushTo = (arr, pt) => arr.push(pt.x, pt.y, pt.z);
+                for (let i = 0; i < sphereCount; i++) {
+                    const pt = points.length > 0 ? points[i % points.length] : {x:0, y:0, z:0};
+                    pushTo(TARGETS.sphere[key], pt);
+                }
+                for (let i = 0; i < ringCount; i++) {
+                    const pt = points.length > 0 ? points[(i + sphereCount) % points.length] : {x:0, y:0, z:0};
+                    pushTo(TARGETS.ring[key], pt);
+                }
+            }
+
+            assignTextTargets('p', generateTextPoints("P"));
+            assignTextTargets('pa', generateTextPoints("PA"));
+            assignTextTargets('pai', generateTextPoints("PAI"));
+            assignTextTargets('paib', generateTextPoints("PAI B"));
+        }
+
+        // --- 3. THREE.JS SETUP ---
+
+        function initThree() {
+            initShapes();
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0a0000, 0.002);
+
+            // --- CAMERA SETUP (ISOMETRIC) ---
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 50; 
             
-            // Close mobile menu if open
-            const menu = document.getElementById('mobile-menu');
-             if (menu.classList.contains('max-h-screen')) {
-                toggleMobileMenu();
-            }
-        }
+            camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
+            camera.position.set(100, 100, 100); 
+            camera.lookAt(scene.position);
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('max-h-0')) {
-                // Open
-                menu.classList.remove('max-h-0', 'opacity-0');
-                menu.classList.add('max-h-screen', 'opacity-100');
-            } else {
-                // Close
-                menu.classList.remove('max-h-screen', 'opacity-100');
-                menu.classList.add('max-h-0', 'opacity-0');
-            }
-        }
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x0a0000, 1);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        /* --- FINANCE LOGIC --- */
-        function handleFinanceLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('finance-user').value;
-            const pass = document.getElementById('finance-pass');
-            const passVal = pass.value;
-            const errorMsg = document.getElementById('pass-error-msg');
-
-            // Hardcoded Credentials
-            if (user === 'Tarbiyah' && passVal === 'paib.2025') {
-                // Success - Open in new tab
-                window.open("https://pai-b-official.github.io/Preview-KAS-PAI-B/", "_blank");
-                pass.value = '';
-            } else {
-                // Fail
-                pass.value = ''; // Clear password
-                errorMsg.classList.remove('hidden'); // Show inline error
-                
-                // Show Popup
-                const modal = document.getElementById('auth-error-modal');
-                modal.classList.add('active');
-            }
-        }
-
-        function closeAuthError() {
-            document.getElementById('auth-error-modal').classList.remove('active');
-        }
-
-        function logoutFinance() {
-            document.getElementById('finance-user').value = '';
-            document.getElementById('finance-pass').value = '';
-            document.getElementById('finance-dashboard').classList.add('hidden');
-            document.getElementById('finance-login').classList.remove('hidden');
-            document.getElementById('pass-error-msg').classList.add('hidden');
-        }
-
-        /* --- STUDENT DATA (Unchanged) --- */
-        const studentsData = [
-            { name: "Ady Surya", nim: "2511038", ig: "@suryaadharm_", img: "Ady.jpg", bioImg: "Ady 2.jpg", bio: "Saya orang yang menyukai berpetualang dan menikmati keindahan alam untuk menghilangkan kebosanan dan mengagumi ciptaan Tuhan, sungguh indah." },
-            { name: "A. Lubadul Fikri", nim: "2511046", ig: "@bangkriii_", img: "Fikri.jpg", bioImg: "Fikri 2.jpg", bio: "Seseorang yang berkepribadian introvert abizzz. Saya ingin melihat dan memahami dunia di luar sana.Saya tak ingin lenyap di dalam bagian beberapa penghalang yang ada ini tanpa mengetahui apa yang ada di luar sana." },
-            { name: "Alyvia Qurrotal A.", nim: "2511042 ", ig: "@piaa.ainiii", img: "Alyvia.jpg", bioImg: "Alyvia 2.jpg", bio: "Saya dikenal sebagai pribadi yang ceria, aktif, dan antusias. Saya juga menyukai tentang hal-hal baru yang membuat saya berkembang." },
-            { name: "Anggun Lolyka H.", nim: "2511043", ig: "@_nnggunn_", img: "Anggun.jpg", bioImg: "Anggun 2.jpg", bio: "Saya orang yang kreatif dengan rasa ingin tahu yang tinggi. Saya senang mempelajari hal-hal baru dan bertemu orang-orang dari berbagai latar belakang karena saya percaya setiap orang memiliki keunikan tersendiri untuk dibagikan." },
-            { name: "Aqillah Mazaya", nim: "2511043", ig: "@aqilahmz._", img: "Aqila.jpg", bioImg: "Aqila 2.jpg", bio: "Saya memiliki minat di bidang agama dan pendidikan. Saya berharap dapat menjadi pendidik yang amanah dan dapat membawa keberkahan bagi diri saya dan orang-orang di sekitar saya." },
-            { name: "Arina Manasika", nim: "2511065", ig: "@mnskaaa_", img: "Arina.jpg", bioImg: "Arina 2.jpg", bio: "Saya berusaha menjadi pribadi yang terus bertumbuh dan berani keluar dari zona nyaman, saya percaya bahwa setiap tantangan yang kita hadapi membentuk karakter dan membuka kesempatan baru untuk belajar." },
-            { name: "Devi Kurniasari", nim: "2511052", ig: "@devy____08", img: "Devi.jpg", bioImg: "Devi 2.jpg", bio: "Saya pantang menyerah untuk meraih masa depan. Ke-depannya, saya ingin menjadi pribadi yang lebih baik." },
-            { name: "Elok Iis N.", nim: "2511060", ig: "@dhe.el", img: "Elok.jpg", bioImg: "Elok 2.jpg", bio: "Senyum adalah sedekah termudah. Selalu berusaha menyebarkan positif vibes." },
-            { name: "Farihatul Azizah", nim: "2511037", ig: "@fariha_aziizah", img: "Azizah.jpg", bioImg: "Azizah 2.jpg", bio: "Introvert, Bermimpilah dan raihlah mimpi itu dengan ilmu yang bermanfaat, serta berusaha menjadi pribadi yang lebih baik dari sebelumnya." },
-            { name: "Hanan Tsuroya A.", nim: "2511073", ig: "@hanan_akyasi", img: "Hanan.jpg", bioImg: "Hanan 2.jpg", bio: "Saya sangat menyukai alam. Rumah saya di Kebumen dan saya sangat suka kuliah di IAINU Kebumen. Saya sangat menyukai kucing dan menikmati alam." },
-            { name: "Hanni Hasanati", nim: "2511068", ig: "@hannihsnt_", img: "Hanni.jpg", bioImg: "Hanni 2.jpg", bio: "Saya anak kedua dari tiga bersaudara, dan semua saudara saya laki-laki. Saat ini saya kuliah di IAINU Kebumen, jurusan Pendidikan Agama Islam." },
-            { name: "Jembar Juli Y.", nim: "2511049", ig: "@jembarjulyy_", img: "Juli.jpg", bioImg: "Juli 2.jpg", bio: "Saya orang yang ceria dan periang. Saya suka tersenyum dan membuat orang lain merasa nyaman di sekitar saya. Dengan pandangan saya yang cerah dan optimis, saya selalu melihat sisi baik dari setiap situasi dan berusaha menyebarkan kebahagiaan kepada orangorang di sekitar saya." },
-            { name: "Lusi Rahmah O.", nim: "2511080", ig: "@lusioktaviara", img: "Lusi.jpg", bioImg: "Lusi 2.jpg", bio: "Saya punya banyak impian untuk masa depan, terutama menjadi orang sukses, kaya, dan dermawan, dan masih banyak lagi impian." },
-            { name: "M. Hanif Fakhry", nim: "2511079", ig: "@hann_id1028", img: "Fakhry.jpg", bioImg: "Fakhry 2.jpg", bio: "Alhamdulillah saya mampu menguasai perangkat lunak desain seperti Canva, Solidwork, Panzoid, dll. Dan Alhamdulillah Saya juga memahami kebutuhan dan menerjemahkannya ke dalam desain pemodelan yang estetis dan fungsional. Saya berorientasi pada detail, imajinatif, dan selalu merencanakan ke depan." },
-            { name: "Pniel Munandar", nim: "2511053", ig: "@pniel76", img: "Pniel.jpg", bioImg: "Pniel 2.jpg", bio: "Saya sangat suka bermain musik, terutama drum. Saya juga bekerja sebagai karyawan untuk mendapatkan penghasilan sendiri, tujuannya adalah untuk meringankan beban orang tua saya." },
-            { name: "Putri Dwi Astuti", nim: "2511061", ig: "@putridwia12_", img: "Putri.jpg", bioImg: "Putri 2.jpg", bio: "saya suka suasana yang damai dan sejuk karena membuat saya senang prinsip hidup saya adalah selalu berbuat yang terbaik dan cita cita saya ingin menjadi guru dan pengusaha yang sukses." },
-            { name: "Riska Ayu K.", nim: "2511039", ig: "@baiza_salma", img: "Ayu.jpg", bioImg: "Ayu 2.jpg", bio: "Saya seorang pemikir, pemilih, dan individu yang sangat ambisius di dunia akademis. Saya bercita-cita menjadi pembicara yang baik dan anggota yang cakap di organisasi mana pun." },
-            { name: "Siti Ulfatur R.", nim: "2511077", ig: "@sssittt_____", img: "Ulfa.jpg", bioImg: "Ulfa 2.png", bio: "Saya anak pertama dari 3 bersaudara. Menjadi anak pertama memang tidak mudah, apalagi perempuan. Tapi saya selalu berusaha menikmati perjalanan hidup saya." },
-            { name: "Tsabita Hasna H.", nim: "2511071", ig: "@tsabitahasna.__", img: "Tsabita.jpg", bioImg: "Tsabita 2.JPG", bio: "Saya adalah seseorang yang terus belajar dari setiap langkah. Luka menguatkan saya, doa menenangkan saya, dan harapan selalu membuat saya berdiri kembali." },
-            { name: "Ubaidillah M.", nim: "2511064", ig: "@muss_tffa", img: "Ubaidillah.jpg", bioImg: "Ubay 2.jpg", bio: "Saya ubaid,pribadi yang percaya bahwa selama aku bernapas, selalu ada harapan untuk terus maju. Hidupku adalah perjalanan belajar dan berjuang, di mana setiap tantangan menjadi peluang untuk tumbuh dan menjadi lebih baik.Keinginan ku suatu saat nanti ingin menjadi manusia yang bermanfaat sesama manusia lain." },
-            { name: "Yoana Dian R.A.", nim: "2511054", ig: "@yoana.diaan", img: "Yoana.jpg", bioImg: "Yoana 2.jpg", bio: "Prinsip hidup saya adalah tetap bersyukur, jangan membandingkan diri dengan orang lain, karena setiap manusia punya prosesnya masing-masing. Cita-cita saya ke depannya adalah menjadi perempuan yang kaya ilmu dan mampu mengamalkannya." },
-            { name: "Youvischa Aulia A.", nim: "2511057", ig: "@youvischa_sinta", img: "Youvischa.jpg", bioImg: "Youvischa 2.jpg", bio: "Halo, nama saya Vischa. Saya anak tertua dari dua bersaudara. Saat ini saya kuliah di IAINU Kebumen, jurusan Pendidikan Agama Islam." },
-            { name: "Yuyun Lutfiyatul K.", nim: "2511051", ig: "@yuyunltfykh_", img: "Yuyun.jpg", bioImg: "Yuyun 2.jpg", bio: "Saya menyukai aktivitas memasak dan berkebun. Pengalaman paling menyenangkan saya adalah saat mendaki gunung." },
-            { name: "Zain Nur Fadilah", nim: "2511076", ig: "@Artyzeen08", img: "Zain.jpg", bioImg: "Zain 2.jpg", bio: "Takdir menempatkan saya sebagai yang tertua di PAI B 2025, tapi itu hanyalah angka di atas kertas. Menjadi tua itu pasti, tapi menjadi dewasa dan berilmu adalah pilihan yang harus diperjuangkan dan saya masih berjuang untuk itu Maka, anggaplah saya teman diskusi yang setara. Mari kita buktikan bahwa PAI B 2025 bukan sekadar kelas kuliah, tapi inkubator persaudaraan dunia akhirat. Sukses kita bukan saat satu orang lari duluan ke garis finis, tapi saat kita semua saling gandeng tangan sampai tujuan." }
-        ];
-
-        function generateStudents() {
-            const grid = document.getElementById('student-grid');
-            let html = '';
-            studentsData.forEach((student, index) => {
-                const bio = student.bio || "Mahasiswa PAI B 2025."; 
-                html += `
-                    <div onclick="openBioModal('${index}')" class="group cursor-pointer">
-                        <div class="relative overflow-hidden rounded-xl aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300 bg-gray-900">
-                            <div class="img-loading-skeleton z-0"><i class="fas fa-spinner fa-spin text-red-900 text-2xl"></i></div>
-                            <img src="${student.img}" alt="${student.name}" 
-                                 class="relative z-10 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:scale-110"
-                                 onload="this.classList.replace('opacity-0', 'opacity-100')"
-                                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=random&size=200'; this.classList.replace('opacity-0', 'opacity-100');">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-20 pointer-events-none"></div>
-                            <div class="absolute bottom-2 left-2 right-2 z-20 pointer-events-none">
-                                <p class="text-white font-bold text-sm truncate group-hover:text-red-400 transition-colors">${student.name}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-        }
-
-        const existingMedia = [
-            { type: 'video', src: 'JJ 1.mp4', title: 'JJ', ratio: 'aspect-[9/16]' },
-            { type: 'image', src: 'PAI B.jpg', title: 'Logo', ratio: 'aspect-square' },
-            { type: 'video', src: 'English Tim.mp4', title: 'English Game', ratio: 'aspect-video' },
-            { type: 'image', src: 'Fotbar Sekelas 2.jpg', title: 'Fotbar', ratio: 'aspect-[4/5]' },
-            { type: 'video', src: 'WhatsApp Video 2025-11-30 at 10.44.47.mp4', title: 'Clip', ratio: 'aspect-[4/5]' },
-            { type: 'image', src: 'Series PAI B.jpg', title: 'PAI B SERIES', ratio: 'aspect-video' },
-            { type: 'video', src: 'Penutupan 2025.mp4', title: 'Memories', ratio: 'aspect-square' },
-            { type: 'image', src: 'Fotbar Sekelas.jpg', title: 'Fotbar', ratio: 'aspect-[9/16]' }
-        ];
-
-        const allFilesData = [
-            ...existingMedia,
-            { type: 'image', src: 'https://placehold.co/600x800/1a0505/FFF?text=FOTO+9', title: '-', ratio: 'aspect-[3/4]' },
-            { type: 'video', src: 'JJ 1.mp4', title: 'Video 10', ratio: 'aspect-[9/16]' },
-            { type: 'image', src: 'Doc 3.jpg', title: 'Mrs. Nadia R. N.K', ratio: 'aspect-video' },
-            { type: 'image', src: 'https://placehold.co/600x600/1a0505/FFF?text=FOTO+12', title: '-', ratio: 'aspect-square' },
-            { type: 'video', src: 'JJ 1.mp4', title: 'Video 13', ratio: 'aspect-[4/5]' },
-            { type: 'image', src: 'https://placehold.co/600x900/1a0505/FFF?text=FOTO+14', title: '-', ratio: 'aspect-[9/16]' },
-            { type: 'image', src: 'https://placehold.co/800x600/1a0505/FFF?text=FOTO+15', title: '-', ratio: 'aspect-video' },
-            { type: 'video', src: 'JJ 1.mp4', title: 'Video 16', ratio: 'aspect-square' },
-            { type: 'image', src: 'https://placehold.co/600x800/1a0505/FFF?text=FOTO+17', title: '-', ratio: 'aspect-[3/4]' },
-            { type: 'image', src: 'https://placehold.co/600x600/1a0505/FFF?text=FOTO+18', title: '-', ratio: 'aspect-square' },
-            { type: 'video', src: 'JJ 1.mp4', title: 'Video 19', ratio: 'aspect-[9/16]' },
-            { type: 'image', src: 'Doc 2,jpg', title: 'English Project', ratio: 'aspect-video' },
-            { type: 'image', src: 'https://placehold.co/600x800/1a0505/FFF?text=FOTO+21', title: '-', ratio: 'aspect-[4/5]' },
-            { type: 'video', src: 'JJ 1.mp4', title: 'Video 22', ratio: 'aspect-square' },
-            { type: 'image', src: 'Aura.jpg', title: 'See You', ratio: 'aspect-[9/16]' },
-            { type: 'image', src: 'https://placehold.co/800x600/1a0505/FFF?text=FOTO+24', title: '-', ratio: 'aspect-video' },
-            { type: 'image', src: 'https://placehold.co/600x600/1a0505/FFF?text=FOTO+25', title: '-', ratio: 'aspect-square' }
-        ];
-
-
-        function renderMainDocGrid(filter = "") {
-            const container = document.getElementById('documentation-grid');
-            let html = '';
-            
-            let itemsToShow = filter ? allFilesData : existingMedia;
-
-            itemsToShow.forEach(item => {
-                if (filter && !item.title.toLowerCase().includes(filter.toLowerCase())) return;
-
-                html += createMediaCard(item);
+            const material = new THREE.PointsMaterial({
+                size: 2.8, 
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true,
+                opacity: 1.0, 
+                map: createParticleTexture()
             });
 
-            if(html === '') {
-                html = `<div class="col-span-3 text-center text-gray-500 py-10">No media found matching "${filter}"</div>`;
+            const sphereGeo = new THREE.BufferGeometry();
+            const sPos = new Float32Array(TARGETS.sphere.default);
+            const sCol = new Float32Array(TARGETS.colors.sphere);
+            sphereGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+            sphereGeo.setAttribute('color', new THREE.BufferAttribute(sCol, 3));
+            sphereMesh = new THREE.Points(sphereGeo, material);
+
+            const ringGeo = new THREE.BufferGeometry();
+            const rPos = new Float32Array(TARGETS.ring.default);
+            const rCol = new Float32Array(TARGETS.colors.ring);
+            ringGeo.setAttribute('position', new THREE.BufferAttribute(rPos, 3));
+            ringGeo.setAttribute('color', new THREE.BufferAttribute(rCol, 3));
+            ringMesh = new THREE.Points(ringGeo, material);
+
+            particleGroup = new THREE.Group();
+            particleGroup.add(sphereMesh);
+            particleGroup.add(ringMesh);
+            scene.add(particleGroup);
+
+            window.addEventListener('resize', onWindowResize, false);
+            animate();
+        }
+
+        function createParticleTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 32; canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(16,16,0,16,16,16);
+            
+            grad.addColorStop(0, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.5, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.8, 'rgba(255,255,255,0.8)');
+            grad.addColorStop(1, 'transparent');
+            
+            ctx.fillStyle = grad;
+            ctx.fillRect(0,0,32,32);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function onWindowResize() {
+            const aspect = window.innerWidth / window.innerHeight;
+            const d = 50;
+            camera.left = -d * aspect;
+            camera.right = d * aspect;
+            camera.top = d;
+            camera.bottom = -d;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- SPECIAL EFFECT UTILS ---
+
+        // Fungsi untuk mereset posisi partikel teks ke tengah (0,0,0)
+        // agar terlihat seperti meledak keluar dari ketiadaan
+        function resetTextParticlesToCenter() {
+            const resetArray = (mesh, count) => {
+                const positions = mesh.geometry.attributes.position.array;
+                for (let i = 0; i < count; i++) {
+                    // Hanya reset partikel yang ditugaskan jadi teks (indeks yang BUKAN kelipatan 5)
+                    if (i % 5 !== 0) {
+                        const idx = i * 3;
+                        positions[idx] = (Math.random() - 0.5) * 5; // Start near center
+                        positions[idx+1] = (Math.random() - 0.5) * 5;
+                        positions[idx+2] = (Math.random() - 0.5) * 5;
+                    }
+                }
+                mesh.geometry.attributes.position.needsUpdate = true;
+            };
+
+            const sphereCount = Math.floor(CONFIG.particleCount * CONFIG.sphereRatio);
+            const ringCount = CONFIG.particleCount - sphereCount;
+            
+            resetArray(sphereMesh, sphereCount);
+            resetArray(ringMesh, ringCount);
+        }
+
+        // --- ANIMATION ---
+
+        function updateParticles(mesh, targetArray, lerpSpeed, noiseAmp, time, offset) {
+            const positions = mesh.geometry.attributes.position.array;
+            
+            for (let i = 0; i < positions.length; i += 3) {
+                const tx = targetArray[i];
+                const ty = targetArray[i+1];
+                const tz = targetArray[i+2];
+
+                positions[i] += (tx - positions[i]) * lerpSpeed;
+                positions[i+1] += (ty - positions[i+1]) * lerpSpeed;
+                positions[i+2] += (tz - positions[i+2]) * lerpSpeed;
+
+                if (noiseAmp > 0) {
+                    positions[i] += Math.sin(time * 3 + (i+offset)) * noiseAmp;
+                    positions[i+1] += Math.cos(time * 2 + (i+offset)) * noiseAmp;
+                }
             }
-            container.innerHTML = html;
+            mesh.geometry.attributes.position.needsUpdate = true;
         }
 
-        function renderAllFilesGrid() {
-            const container = document.getElementById('all-files-grid');
-            let html = '';
+        function updateColors(mesh, targetColor, baseColors, lerpSpeed) {
+            const colors = mesh.geometry.attributes.color.array;
+            const tempColor = new THREE.Color();
             
-            allFilesData.forEach(item => {
-                html += createMediaCard(item, true); 
-            });
-            container.innerHTML = html;
+            for (let i = 0; i < colors.length; i += 3) {
+                if (targetColor) {
+                    tempColor.setRGB(colors[i], colors[i+1], colors[i+2]);
+                    tempColor.lerp(targetColor, lerpSpeed);
+                    colors[i] = tempColor.r;
+                    colors[i+1] = tempColor.g;
+                    colors[i+2] = tempColor.b;
+                } else {
+                    const br = baseColors[i];
+                    const bg = baseColors[i+1];
+                    const bb = baseColors[i+2];
+                    colors[i] += (br - colors[i]) * 0.05;
+                    colors[i+1] += (bg - colors[i+1]) * 0.05;
+                    colors[i+2] += (bb - colors[i+2]) * 0.05;
+                }
+            }
+            mesh.geometry.attributes.color.needsUpdate = true;
         }
 
-        function createMediaCard(item, isSmall = false) {
-            const margin = isSmall ? 'mb-4' : 'mb-6'; 
-            
-            const isLogo = item.ratio === 'aspect-square' && item.title.toLowerCase().includes('logo');
-            
-            const shapeClass = isLogo 
-                ? `rounded-full aspect-square border-4 border-red-600/30 shadow-[0_0_25px_rgba(220,38,38,0.4)]` 
-                : `rounded-xl ${item.ratio}`;
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
 
-            const textPosition = isLogo 
-                ? 'inset-0 flex items-end justify-center pb-6' 
-                : 'bottom-4 left-4';
+            let targetKey = 'default';
+            let targetColor = null; 
+            let lerpSpeed = 0.08;
+            let noiseAmp = 0.05;
+            let isTextMode = false;
 
-            if (item.type === 'video') {
-                return `
-                <div class="break-inside-avoid relative group ${shapeClass} overflow-hidden glass-panel cursor-pointer ${margin}" onclick="openMediaModal('video', '${item.src}')">
-                    <div class="w-full h-full bg-black/50 flex items-center justify-center">
-                        ${item.src ? 
-                            `<video class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500" loop muted onmouseenter="previewVideo(this)" onmouseleave="stopPreview(this)">
-                                <source src="${item.src}" type="video/mp4">
-                             </video>` 
-                            : `<i class="fas fa-video text-gray-600 text-4xl"></i>` 
+            // --- STATE MACHINE ---
+            switch (STATE.mode) {
+                case 'SATURN':
+                    targetKey = 'default';
+                    targetColor = null; 
+                    STATE.hasOpenedLink = false;
+                    STATE.explodeStartTime = null;
+                    STATE.hasResetForText = false;
+                    break;
+                case 'GOLD_SPHERE':
+                    targetKey = 'default'; 
+                    targetColor = CONFIG.colors.gold;
+                    noiseAmp = 0.0; 
+                    STATE.hasOpenedLink = false;
+                    STATE.explodeStartTime = null;
+                    STATE.hasResetForText = false;
+                    break;
+                case 'P': targetKey = 'p'; targetColor = CONFIG.colors.text; noiseAmp = 0; isTextMode = true; break;
+                case 'PA': targetKey = 'pa'; targetColor = CONFIG.colors.text; noiseAmp = 0; isTextMode = true; break;
+                case 'PAI': targetKey = 'pai'; targetColor = CONFIG.colors.text; noiseAmp = 0; isTextMode = true; break;
+                case 'PAIB': targetKey = 'paib'; targetColor = CONFIG.colors.text; noiseAmp = 0; isTextMode = true; break;
+                case 'EXPLODE':
+                    isTextMode = true;
+                    if (!STATE.explodeStartTime) STATE.explodeStartTime = Date.now();
+                    const elapsed = Date.now() - STATE.explodeStartTime;
+                    
+                    // --- FASE LEDAKAN & MUNCUL TEKS ---
+                    if (elapsed < 500) {
+                        // 0ms - 500ms: CHAOS! Partikel meledak sangat cepat (Durasi dikurangi drastis)
+                        targetKey = 'chaos';
+                        lerpSpeed = 0.15; // Lebih cepat dari 0.05
+                        noiseAmp = 0.5; 
+                        targetColor = CONFIG.colors.brightWhite; 
+                        STATE.hasResetForText = false;
+                    } else {
+                        // 500ms+: TEKS MUNCUL (Instan tanpa delay)
+                        targetKey = 'mixed'; 
+                        targetColor = CONFIG.colors.gold;
+                        lerpSpeed = 0.2; // Sangat cepat (sebelumnya 0.1 atau 0.08)
+                        noiseAmp = 0.02;
+
+                        // Efek "Reset ke Tengah" agar teks muncul dari ketiadaan/tengah
+                        if (!STATE.hasResetForText) {
+                            resetTextParticlesToCenter();
+                            STATE.hasResetForText = true;
                         }
-                    </div>
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    <div class="absolute z-10 ${textPosition}">
-                        <span class="text-xs font-bold text-white bg-red-600 px-2 py-1 rounded shadow-lg">${item.title}</span>
-                    </div>
-                </div>`;
-            } else {
-                return `
-                <div class="break-inside-avoid relative group ${shapeClass} overflow-hidden glass-panel cursor-pointer ${margin}" onclick="openMediaModal('image', '${item.src}')">
-                    <img src="${item.src}" alt="${item.title}" 
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            onerror="this.src='https://placehold.co/600x800/1a0505/FFF?text=No+Image';">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                    <div class="absolute ${textPosition}">
-                        <h3 class="text-lg font-bold text-white drop-shadow-md">${item.title}</h3>
-                    </div>
-                </div>`;
+                    }
+
+                    if (!STATE.hasOpenedLink && elapsed > 4500) {
+                        STATE.hasOpenedLink = true;
+                        window.open('pai-b-official2025.gt.tc', '_blank');
+                    }
+                    break;
             }
-        }
 
-        function initDocumentation() {
-            renderMainDocGrid();
-        }
+            // --- UPDATE PARTICLES ---
+            updateParticles(sphereMesh, TARGETS.sphere[targetKey], lerpSpeed, noiseAmp, time, 0);
+            updateParticles(ringMesh, TARGETS.ring[targetKey], lerpSpeed, noiseAmp, time, 1000);
 
-        function handleSearch(event) {
-            if (event.key === 'Enter' || event.type === 'click' || event.type === 'keyup') {
-                const query = document.getElementById('doc-search').value;
-                renderMainDocGrid(query);
-            }
-        }
+            updateColors(sphereMesh, targetColor, TARGETS.colors.sphere, 0.08);
+            updateColors(ringMesh, targetColor, TARGETS.colors.ring, 0.08);
 
-        function openAllFiles() {
-            renderAllFilesGrid();
-            const modal = document.getElementById('all-files-overlay');
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            history.pushState({ page: 'all-files' }, '', '#all-files');
-            modal.focus();
-        }
-
-        function closeAllFiles() {
-             if (history.state && history.state.page === 'all-files') {
-                history.back();
-                return;
-            }
-            const modal = document.getElementById('all-files-overlay');
-            modal.classList.remove('open');
-            document.body.style.overflow = 'auto';
-            history.replaceState({ page: 'documentation' }, '', '#documentation');
-        }
-
-        window.addEventListener('popstate', function(event) {
-            const state = event.state || { page: 'home' };
+            // --- ROTATION LOGIC (ISOMETRIC) ---
             
-            // CLEAN UP ALL MODALS FIRST
-            const bioModal = document.getElementById('bio-modal');
-            const mediaModal = document.getElementById('media-modal');
-            const familyGallery = document.getElementById('family-gallery');
-            const allFilesModal = document.getElementById('all-files-overlay');
-            const mediaContainer = document.getElementById('media-container');
-            const teamExecutorModal = document.getElementById('team-executor-modal');
+            if (isTextMode) {
+                // Teks Billboard (Selalu menghadap kamera)
+                particleGroup.lookAt(camera.position); 
+                
+                // Reset rotasi internal
+                sphereMesh.rotation.set(0, 0, 0);
+                ringMesh.rotation.set(0, 0, 0);
 
-            // Force close everything visual
-            bioModal.classList.remove('active');
-            mediaModal.classList.remove('active');
-            familyGallery.classList.remove('open');
-            allFilesModal.classList.remove('open');
-            teamExecutorModal.classList.remove('open');
-            mediaContainer.innerHTML = '';
-            document.body.style.overflow = 'auto'; // Re-enable scroll
+            } else {
+                // MODE SATURNUS & GENGGAM
+                const targetZ = Math.PI / 4; 
+                const targetX = Math.PI / 6; 
+                
+                particleGroup.rotation.z += (targetZ - particleGroup.rotation.z) * 0.05;
+                particleGroup.rotation.x += (targetX - particleGroup.rotation.x) * 0.05;
+                particleGroup.rotation.y = 0; 
 
-            // Now handle specific state logic if strictly needed, or just let the main tab switch happen
-            if (['home', 'structure', 'documentation', 'finance'].includes(state.page)) {
-                _switchTabUI(state.page);
-            } else if (state.page === 'family-gallery') {
-                 familyGallery.classList.add('open');
-                 document.body.style.overflow = 'hidden';
-            } else if (state.page === 'all-files') {
-                 allFilesModal.classList.add('open');
-                 document.body.style.overflow = 'hidden';
-            } else if (state.page === 'team-executor') {
-                 teamExecutorModal.classList.add('open');
-                 document.body.style.overflow = 'hidden';
-            } else if (state.page === 'bio-details') {
-                // If popping back to bio details, we might need data. 
-                // For simplicity on back button, let's fall back to family gallery or home if data missing
-                 familyGallery.classList.add('open');
-                 document.body.style.overflow = 'hidden';
+                if (STATE.mode === 'GOLD_SPHERE') {
+                    ringMesh.rotation.y -= 0.3;
+                    sphereMesh.rotation.y -= 0.005;
+                } else {
+                    sphereMesh.rotation.y -= 0.002;
+                    ringMesh.rotation.y -= 0.002;
+                }
             }
+            
+            renderer.render(scene, camera);
+        }
+
+        // --- 4. GESTURE RECOGNITION ---
+
+        function getDistance(p1, p2) {
+            return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+        }
+
+        function detectGesture(landmarks) {
+            const wrist = landmarks[0];
+            const palmSize = getDistance(wrist, landmarks[9]); 
+
+            const isExtended = (tipIdx, pipIdx) => {
+                const distTip = getDistance(wrist, landmarks[tipIdx]);
+                const distPip = getDistance(wrist, landmarks[pipIdx]);
+                return distTip > distPip + (palmSize * 0.3); 
+            };
+
+            const indexOpen = isExtended(8, 6);
+            const middleOpen = isExtended(12, 10);
+            const ringOpen = isExtended(16, 14);
+            const pinkyOpen = isExtended(20, 18);
+            const thumbOpen = isExtended(4, 2);
+
+            let fingersOpenCount = 0;
+            if(indexOpen) fingersOpenCount++;
+            if(middleOpen) fingersOpenCount++;
+            if(ringOpen) fingersOpenCount++;
+            if(pinkyOpen) fingersOpenCount++;
+            if(thumbOpen) fingersOpenCount++;
+
+            if (fingersOpenCount >= 5) return 'EXPLODE';
+            if (indexOpen && middleOpen && ringOpen && pinkyOpen && !thumbOpen) return 'PAIB';
+            if (indexOpen && middleOpen && ringOpen) return 'PAI';
+            if (indexOpen && middleOpen) return 'PA';
+            if (indexOpen) return 'P';
+            if (fingersOpenCount === 0) return 'GOLD_SPHERE';
+
+            return 'SATURN'; 
+        }
+
+        function onResults(results) {
+            loadingEl.style.display = 'none';
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                STATE.handPresent = true;
+                const landmarks = results.multiHandLandmarks[0];
+                const mode = detectGesture(landmarks);
+                
+                if (STATE.mode === 'EXPLODE' && mode !== 'GOLD_SPHERE') {
+                    // Lock explode animation
+                } else {
+                    STATE.mode = mode;
+                }
+
+                let statusText = "STATUS: ";
+                if (STATE.mode === 'SATURN') statusText += "STANDBY"; 
+                else if (STATE.mode === 'GOLD_SPHERE') statusText += "GENGGAM (CINCIN PUTAR CEPAT)";
+                else if (STATE.mode === 'EXPLODE') {
+                    statusText += "WELCOME...";
+                }
+                else if (STATE.mode === 'PAIB') statusText += "PAI B (Final)";
+                else statusText += "MODE HURUF: " + STATE.mode;
+                
+                statusEl.textContent = statusText;
+                statusEl.className = (STATE.mode === 'SATURN' || STATE.mode === 'GOLD_SPHERE') ? "status-badge" : "status-badge status-active";
+
+            } else {
+                STATE.handPresent = false;
+                statusEl.textContent = "TUNJUKKAN TANGAN";
+                statusEl.className = "status-badge";
+                STATE.mode = 'SATURN'; 
+            }
+        }
+
+        // --- INIT ---
+        const hands = new Hands({locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        }});
+
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 1, 
+            minDetectionConfidence: 0.6,
+            minTrackingConfidence: 0.6
         });
 
-        function toggleFamilyGallery() {
-            const gallery = document.getElementById('family-gallery');
-            if (gallery.classList.contains('open')) {
-                if (history.state && history.state.page === 'family-gallery') {
-                    history.back();
-                    return;
-                }
-                gallery.classList.remove('open');
-                document.body.style.overflow = 'auto';
-                const activeSection = document.querySelector('.active-section');
-                // history.replaceState({ page: activeSection ? activeSection.id : 'home' }, '', '#' + (activeSection ? activeSection.id : 'home'));
-            } else {
-                gallery.classList.add('open');
-                document.body.style.overflow = 'hidden';
-                history.pushState({ page: 'family-gallery' }, '', '#family');
-                gallery.focus();
-            }
-        }
+        hands.onResults(onResults);
 
-        function openBioModal(index) {
-            const student = studentsData[index];
-            const modal = document.getElementById('bio-modal');
-            const content = document.getElementById('bio-content');
-            
-            document.getElementById('modal-name').innerText = student.name;
-            document.getElementById('modal-nim').innerText = "NIM: " + student.nim;
-            
-            const igContainer = document.getElementById('modal-ig');
-            if(student.ig === '-' || student.ig === '') {
-                igContainer.innerHTML = `<span class="text-gray-500">-</span>`;
-            } else {
-                const username = student.ig.replace('@', '').trim();
-                igContainer.innerHTML = `<a href="https://www.instagram.com/${username}" target="_blank" rel="noopener noreferrer" class="text-lg text-white font-medium hover:text-red-400 transition cursor-pointer flex items-center gap-1">${student.ig} <i class="fas fa-external-link-alt text-xs ml-1 opacity-50"></i></a>`;
-            }
-            document.getElementById('modal-bio').innerText = `"${student.bio}"`;
-            const imgElement = document.getElementById('modal-img');
-            const loaderElement = document.getElementById('modal-img-loader');
-            imgElement.classList.remove('img-loaded');
-            imgElement.style.opacity = '0';
-            loaderElement.style.display = 'flex'; 
-            imgElement.onload = function() {
-                imgElement.style.opacity = '1';
-                loaderElement.style.display = 'none'; 
-            };
-            imgElement.onerror = function() {
-                this.onerror = null;
-                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=random&size=400`;
-                imgElement.style.opacity = '1';
-                loaderElement.style.display = 'none';
-            };
-            imgElement.src = student.bioImg;
+        const videoElement = document.getElementById('input-video');
+        const cameraUtils = new Camera(videoElement, {
+            onFrame: async () => {
+                await hands.send({image: videoElement});
+            },
+            width: 640,
+            height: 480
+        });
 
-            modal.classList.add('active');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-            history.pushState({ page: 'bio-details' }, '', '#student-bio');
-            
-            setTimeout(() => {
-                content.focus();
-            }, 100);
-        }
-
-        function closeBioModal(e, force = false) {
-            if (e && !force) {
-                const content = document.getElementById('bio-content');
-                if (content.contains(e.target)) return;
-            }
-
-            if (history.state && history.state.page === 'bio-details') {
-                history.back();
-                return;
-            }
-            document.getElementById('bio-modal').classList.remove('active');
-        }
-
-        function openMediaModal(type, src) {
-            if(!src) return;
-
-            if (type === 'video') {
-                const bgMusic = document.getElementById('bg-music');
-                if (bgMusic && !bgMusic.paused) {
-                    bgMusic.pause();
-                    bgMusic.dataset.wasPlaying = "true";
-                }
-            }
-            const modal = document.getElementById('media-modal');
-            const container = document.getElementById('media-container');
-            
-            if (type === 'video') {
-                container.innerHTML = `
-                    <div class="bg-black w-full h-full flex items-center justify-center">
-                        <video controls autoplay class="w-full h-auto max-h-[85vh]">
-                            <source src="${src}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>`;
-                container.dataset.mediaType = 'video';
-            } else {
-                container.innerHTML = `
-                    <img src="${src}" class="w-full h-auto max-h-[85vh] object-contain bg-black" onerror="this.src='https://placehold.co/600x400?text=Image+Not+Found';">
-                `;
-                container.dataset.mediaType = 'image';
-            }
-            modal.classList.add('active');
-            history.pushState({ page: 'media-preview' }, '', '#preview');
-        }
-
-        function closeMediaModal(e, force = false) {
-            if (e && !force) {
-                 const container = document.getElementById('media-container');
-                 if (container.contains(e.target)) return;
-            }
-
-            // CRITICAL FIX: If user is in preview state, go back instead of replacing state
-            if (history.state && history.state.page === 'media-preview') {
-                history.back();
-                return;
-            }
-
-            // Fallback cleanup if state is mismatched
-            const container = document.getElementById('media-container');
-            if (container.dataset.mediaType === 'video') {
-                 const bgMusic = document.getElementById('bg-music');
-                 const musicBtn = document.getElementById('music-btn'); 
-                 if (bgMusic && bgMusic.dataset.wasPlaying === "true") {
-                     bgMusic.play().catch(e => console.log(e));
-                     if(musicBtn) {
-                         musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-                         musicBtn.classList.add('music-pulse');
-                         isPlaying = true;
-                     }
-                 }
-            }
-            container.innerHTML = ''; 
-            document.getElementById('media-modal').classList.remove('active');
-        }
+        initThree();
         
-        function previewVideo(video) {
-            video.muted = true;
-            var playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {}).catch(error => { if (error.name !== 'AbortError') console.log("Prev prevented"); });
-            }
+        // --- IMPROVED CAMERA START LOGIC ---
+        function startCamera() {
+            loadingText.innerText = "MEMBUKA KAMERA...";
+            startBtn.classList.add('hidden');
+            
+            cameraUtils.start().then(() => {
+                console.log("Camera started successfully");
+                loadingEl.style.display = 'none';
+            }).catch(e => {
+                console.error("Camera failed:", e);
+                loadingText.innerHTML = "Akses Ditolak.<br>Izinkan kamera & klik tombol dibawah.";
+                loadingText.className = "text-red-500 font-bold mb-4 px-4";
+                startBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> COBA LAGI';
+                startBtn.classList.remove('hidden');
+                
+                statusEl.textContent = "Error: Kamera tidak diizinkan.";
+                statusEl.style.color = "red";
+            });
         }
 
-        function stopPreview(video) {
-            video.pause();
-            video.currentTime = 0; 
-        }
+        // Event listener untuk tombol start manual
+        startBtn.addEventListener('click', () => {
+            startCamera();
+        });
+
+        // Coba start otomatis saat load
+        startCamera();
+
     </script>
 </body>
 </html>
-
