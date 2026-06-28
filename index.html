@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Dashboard - Hasil Sensus SE2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,11 +14,11 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
         .dark .glass-panel {
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.95);
         }
         /* Scrollbar custom */
         ::-webkit-scrollbar { width: 6px; }
@@ -29,23 +29,24 @@
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased min-h-screen transition-colors duration-300">
 
-    <!-- Navbar -->
+    <!-- Navbar yang Responsif -->
     <nav class="sticky top-0 z-40 glass-panel border-b border-gray-200 dark:border-slate-800 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3">
-                    <div class="bg-blue-600 text-white p-2 rounded-lg">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="bg-blue-600 text-white p-1.5 sm:p-2 rounded-lg shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
-                    <span class="font-extrabold text-xl tracking-tight text-slate-800 dark:text-white">AdminPreview<span class="text-blue-600 dark:text-blue-400">SE2026</span></span>
+                    <span class="font-extrabold text-base sm:text-xl tracking-tight text-slate-800 dark:text-white truncate">Admin<span class="text-blue-600 dark:text-blue-400">SE2026</span></span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button onclick="fetchData()" id="btnRefresh" class="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-3 py-1.5 rounded-lg shadow-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Tarik Data
+                <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+                    <button onclick="fetchData()" id="btnRefresh" class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-2 sm:px-3 py-1.5 rounded-lg shadow-sm">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span class="hidden sm:inline">Tarik Data</span>
+                        <span class="sm:hidden">Tarik</span>
                     </button>
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors border border-transparent dark:border-slate-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <button onclick="toggleDarkMode()" class="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors border border-transparent dark:border-slate-700">
+                        <svg class="w-5 h-5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     </button>
                 </div>
             </div>
@@ -53,13 +54,13 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         <!-- Header & Search -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 sm:mb-8 gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Data Hasil Sensus</h1>
-                <p class="text-slate-500 dark:text-slate-400 mt-1">Total Data Masuk: <span id="totalData" class="font-bold text-blue-600 dark:text-blue-400">0</span></p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Data Hasil Sensus</h1>
+                <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mt-1">Total Data Masuk: <span id="totalData" class="font-bold text-blue-600 dark:text-blue-400">0</span></p>
             </div>
             <div class="w-full md:w-96 relative">
                 <input type="text" id="searchInput" onkeyup="filterData()" placeholder="Cari Nama, No. WA, atau Desa..." class="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-sm rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white shadow-sm transition-all">
@@ -70,39 +71,47 @@
         <!-- State: Loading -->
         <div id="loadingState" class="flex flex-col items-center justify-center py-20 hidden">
             <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Menarik data dari Spreadsheet Server...</p>
+            <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse text-sm sm:text-base text-center">Menarik data dari Spreadsheet Server...</p>
         </div>
 
         <!-- State: Empty / Error -->
-        <div id="emptyState" class="flex-col items-center justify-center py-20 text-center flex">
-            <div class="bg-gray-100 dark:bg-slate-800 p-5 rounded-full mb-4 border border-gray-200 dark:border-slate-700 shadow-sm">
-                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+        <div id="emptyState" class="flex-col items-center justify-center py-20 text-center flex px-4">
+            <div class="bg-gray-100 dark:bg-slate-800 p-4 sm:p-5 rounded-full mb-4 border border-gray-200 dark:border-slate-700 shadow-sm">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
             </div>
-            <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="emptyTitle">Data Belum Ditarik</h3>
-            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto" id="emptyMessage">Silakan tekan tombol "Tarik Data" di pojok kanan atas untuk memuat hasil dari Database.</p>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-white" id="emptyTitle">Data Belum Ditarik</h3>
+            <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto" id="emptyMessage">Silakan tekan tombol "Tarik Data" di pojok kanan atas untuk memuat hasil dari Database.</p>
         </div>
 
         <!-- Grid Cards Content -->
-        <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
+        <div id="dataGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 hidden">
             <!-- Cards will be injected here -->
         </div>
 
     </main>
 
-    <!-- MODAL DETAIL PENUH -->
+    <!-- MODAL DETAIL PENUH YANG AMAN UNTUK LAYAR HP -->
     <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 flex justify-end">
         <div id="modalPanel" class="bg-white dark:bg-slate-800 w-full md:w-[750px] h-full shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
             
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 shadow-sm z-10">
-                <h2 class="text-xl font-bold text-slate-800 dark:text-white truncate pr-4" id="modalNameTitle">Detail Responden</h2>
-                <button onclick="closeModal()" class="p-2 bg-gray-200 dark:bg-slate-700 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/50 dark:hover:text-red-400 rounded-full transition-colors focus:outline-none">
+            <!-- Modal Header yang Responsif & Jelas Tombol Kembalinya -->
+            <div class="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm z-10 shrink-0">
+                <!-- Tombol Kembali Khusus Tampilan HP -->
+                <button onclick="closeModal()" class="md:hidden flex items-center gap-1.5 p-1.5 pr-3 mr-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition-colors shrink-0 outline-none">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <span class="text-sm font-semibold">Kembali</span>
+                </button>
+                
+                <h2 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-white truncate flex-1" id="modalNameTitle">Detail Responden</h2>
+                
+                <!-- Tombol Silang (X) Khusus Tampilan Desktop -->
+                <button onclick="closeModal()" class="hidden md:flex p-2 bg-gray-200 dark:bg-slate-700 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/50 dark:hover:text-red-400 rounded-full transition-colors focus:outline-none shrink-0 ml-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <!-- Modal Content (Scrollable) -->
-            <div class="flex-1 overflow-y-auto p-6 bg-gray-100/50 dark:bg-slate-800" id="modalContent">
+            <!-- Modal Content (Scrollable & Aman dari Tumpang Tindih) -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-100/50 dark:bg-slate-800 w-full" id="modalContent">
                 <!-- Data inject -->
             </div>
             
@@ -110,23 +119,22 @@
     </div>
 
     <!-- MODAL ZOOM GAMBAR -->
-    <div id="imageZoomModal" class="fixed inset-0 bg-black/90 z-[60] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0" onclick="closeImageZoom()">
+    <div id="imageZoomModal" class="fixed inset-0 bg-black/95 z-[60] hidden flex items-center justify-center p-2 sm:p-4 transition-opacity duration-300 opacity-0">
         <img id="zoomedImage" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300">
-        <button class="absolute top-6 right-6 text-white hover:text-gray-300 bg-black/50 p-2 rounded-full backdrop-blur">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button onclick="closeImageZoom()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-white hover:text-gray-300 bg-white/20 hover:bg-white/40 p-2 sm:p-3 rounded-full backdrop-blur transition-all outline-none">
+            <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
     </div>
 
     <script>
         // ==========================================
         // TEMPEL URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA DI SINI!
-        // PASTIKAN URL BERAKHIRAN /exec
         // ==========================================
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwsqzju4H_SG5Au5r5eG7b-iWJsiLh4Baq0KXUZiJv00jIJ7GvIrvKoUDRkYHN1jHgv/exec'; 
 
         let globalData = [];
 
-        // Dark Mode Logic
+        // Logika Mode Gelap
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -155,23 +163,19 @@
             grid.classList.add('hidden');
             
             btnRefresh.classList.add('animate-pulse');
-            btnRefresh.innerHTML = `<svg class="animate-spin w-5 h-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sedang Menarik...`;
+            btnRefresh.innerHTML = `<svg class="animate-spin w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="hidden sm:inline">Menarik...</span>`;
             btnRefresh.disabled = true;
 
-            // Parameter { redirect: 'follow' } WAJIB disertakan untuk menghindari Error CORS di Google Sheets
             fetch(SCRIPT_URL, {
                 method: 'GET',
                 redirect: 'follow' 
             })
             .then(response => {
                 if (!response.ok) throw new Error("Jaringan bermasalah atau Server Google gagal merespons.");
-                
-                // Deteksi cerdas jika URL salah
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Link Apps Script salah ATAU Akses deployment Anda belum disetting 'Semua Orang' (Anyone).");
+                    throw new Error("Link Apps Script salah ATAU Akses deployment Anda belum 'Semua Orang'.");
                 }
-                
                 return response.json();
             })
             .then(res => {
@@ -186,14 +190,14 @@
             .catch(err => {
                 console.error("Fetch error:", err);
                 document.getElementById('emptyTitle').textContent = "Gagal Memuat Data";
-                document.getElementById('emptyMessage').innerHTML = `<span class="text-red-500 font-bold">${err.message}</span><br>Silakan periksa kembali SCRIPT_URL dan pengaturan Deployment Anda.`;
+                document.getElementById('emptyMessage').innerHTML = `<span class="text-red-500 font-bold text-sm">${err.message}</span>`;
                 loading.classList.add('hidden');
                 empty.classList.remove('hidden');
                 empty.classList.add('flex');
             })
             .finally(() => {
                 btnRefresh.classList.remove('animate-pulse');
-                btnRefresh.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Segarkan Data`;
+                btnRefresh.innerHTML = `<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> <span class="hidden sm:inline">Tarik Data</span><span class="sm:hidden">Tarik</span>`;
                 btnRefresh.disabled = false;
             });
         }
@@ -224,9 +228,8 @@
                 const nama = item.nama_lengkap || item.nama || item.Nama || "Tanpa Nama";
                 const desa = item.desa || "-";
                 const noKeluarga = item.no_keluarga || "-";
-                const timestamp = item.timestamp || "-";
+                const timestamp = item.timestamp ? item.timestamp.split(' ')[0] : "-";
                 
-                // Cek ketersediaan foto (mendukung base64 atau http drive)
                 let thumbnail = '';
                 if(item.foto_depan_rumah && (item.foto_depan_rumah.includes('http') || item.foto_depan_rumah.includes('data:image'))) {
                     thumbnail = item.foto_depan_rumah;
@@ -240,26 +243,27 @@
 
                 let imgHtml = '';
                 if (thumbnail) {
-                    imgHtml = `<div class="h-44 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative">
-                                  <img src="${thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                    const t = new Date().getTime(); // Anti-cache
+                    imgHtml = `<div class="h-40 sm:h-44 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative shrink-0">
+                                  <img src="${thumbnail}&t=${t}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSI+PC9wb2x5bGluZT48L3N2Zz4='">
                                   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                </div>`;
                 } else {
-                    imgHtml = `<div class="h-16 w-full bg-gradient-to-r from-blue-600 to-indigo-700"></div>`;
+                    imgHtml = `<div class="h-16 w-full bg-gradient-to-r from-blue-600 to-indigo-700 shrink-0"></div>`;
                 }
 
                 card.innerHTML = `
                     ${imgHtml}
-                    <div class="p-5 flex-1 flex flex-col relative">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-white line-clamp-1 pr-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${nama}</h3>
+                    <div class="p-4 sm:p-5 flex-1 flex flex-col relative w-full">
+                        <div class="flex justify-between items-start mb-2 gap-2 w-full">
+                            <h3 class="font-bold text-base sm:text-lg text-slate-800 dark:text-white line-clamp-2 flex-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${nama}</h3>
                         </div>
-                        <div class="text-sm text-slate-500 dark:text-slate-400 space-y-1.5 mb-4 flex-1">
-                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> <span class="font-semibold text-slate-700 dark:text-slate-300">No. Kel: ${noKeluarga}</span></p>
-                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Desa ${desa}</p>
-                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${timestamp}</p>
+                        <div class="text-sm text-slate-500 dark:text-slate-400 space-y-1.5 mb-4 flex-1 w-full">
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> <span class="font-semibold text-slate-700 dark:text-slate-300 truncate">No. Kel: ${noKeluarga}</span></p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <span class="truncate">Desa ${desa}</span></p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-orange-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span class="truncate">${timestamp}</span></p>
                         </div>
-                        <div class="pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-sm font-bold text-blue-600 dark:text-blue-400">
+                        <div class="pt-3 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 w-full mt-auto shrink-0">
                             Buka Laporan Penuh <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </div>
@@ -281,9 +285,12 @@
             return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
+
         // ===============================================
-        // FUNGSI UNTUK PENGELOMPOKAN DATA DI MODAL
+        // SISTEM NAVIGASI ANTI-TUTUP (HISTORY API) & MODAL
         // ===============================================
+        let modalState = 'none'; // Status aplikasi: 'none', 'detail', 'zoom'
+
         function openModal(data) {
             const modal = document.getElementById('detailModal');
             const panel = document.getElementById('modalPanel');
@@ -291,11 +298,17 @@
             
             document.getElementById('modalNameTitle').textContent = data.nama_lengkap || data.nama || "Detail Laporan Sensus";
 
-            // Definisi Kelompok Sesuai Kuesioner
+            // Cegah aplikasi keluar saat tombol BACK HP ditekan
+            if (modalState !== 'detail') {
+                history.pushState({ modal: 'detail' }, '', '#detail');
+                modalState = 'detail';
+            }
+
+            // PENGELOMPOKAN DATA SEPERTI KUESIONER
             const groupDefinitions = {
                 "1. Identitas Pemilik & Wilayah": ['autorize', 'desa', 'rt', 'rw', 'nama_lengkap', 'no_wa', 'berapa_keluarga', 'no_kk', 'nik_anggota', 'email'],
                 "2. Keberadaan Keluarga": ['anggota_menetap', 'anggota_luar_kk', 'jenis_usaha_keluarga', 'Bantuan'],
-                "3. Status Keluarga (Anggota)": [], // Diisi dinamis
+                "3. Status Keluarga (Anggota)": [], 
                 "4. Pendapatan Lainnya": ['jenis_pendapatan_lain', 'asal_pendapatan_lain', 'nominal_pendapatan_lain'],
                 "5. Aset Bangunan & Tanah": ['luas_tanah_bangunan', 'luas_luar_rumah', 'nilai_aset', 'nilai_non_aset'],
                 "6. Usaha / Pendapatan": ['aktivitas_harian', 'nominal_per_bulan', 'persentase_modal', 'asal_kepemilikan', 'rekening_tujuan'],
@@ -309,11 +322,11 @@
             let processedKeys = new Set(['id', 'timestamp']);
             let html = '';
 
-            // Fungsi render 1 blok section
             function renderSection(title, keysToRender) {
                 let sectionHtml = '';
                 let hasData = false;
-                let gridHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+                // Grid dirubah agar di HP hanya 1 kolom, di tablet/PC 2 kolom agar tidak bertabrakan
+                let gridHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full">';
                 
                 keysToRender.forEach(k => {
                     if (data.hasOwnProperty(k)) {
@@ -323,36 +336,37 @@
                         let displayVal = (!val || String(val).trim() === '') ? '- Kosong -' : String(val);
                         let textClass = displayVal === '- Kosong -' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
                         
-                        // Perlakuan Khusus Untuk Foto
+                        // Render Gambar
                         if (title === "11. Dokumentasi Foto" && displayVal !== '- Kosong -' && (displayVal.includes('http') || displayVal.includes('data:image'))) {
+                            const t = new Date().getTime(); // Anti-cache
                             gridHtml += `
-                            <div class="col-span-1 md:col-span-2 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-slate-900/50">
-                                <div class="p-2 bg-gradient-to-r from-slate-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 border-b border-gray-200 dark:border-slate-600">
-                                    <p class="text-xs font-bold text-center text-slate-700 dark:text-slate-300 uppercase tracking-wider">${formatLabel(k)}</p>
+                            <div class="col-span-1 md:col-span-2 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-slate-900/50 w-full">
+                                <div class="p-2 sm:p-3 bg-gradient-to-r from-slate-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 border-b border-gray-200 dark:border-slate-600">
+                                    <p class="text-xs sm:text-sm font-bold text-center text-slate-700 dark:text-slate-300 uppercase tracking-wider">${formatLabel(k)}</p>
                                 </div>
-                                <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px]" onclick="openImageZoom('${displayVal}')">
-                                    <img src="${displayVal}" class="w-full object-contain max-h-72 hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
+                                <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px] sm:min-h-[200px] w-full p-2" onclick="openImageZoom('${displayVal}&t=${t}')">
+                                    <img src="${displayVal}&t=${t}" class="max-w-full max-h-60 sm:max-h-72 object-contain hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
                                 </div>
                             </div>`;
                         } else {
+                            // Render Teks (Diberi break-words agar teks panjang memotong ke bawah, bukan menyamping menabrak kotak)
                             gridHtml += `
-                            <div class="p-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-sm transition-shadow">
-                                <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">${formatLabel(k)}</p>
-                                <p class="text-sm ${textClass} break-words whitespace-pre-wrap">${displayVal}</p>
+                            <div class="p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-sm transition-shadow min-w-0 w-full overflow-hidden">
+                                <p class="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1.5 truncate">${formatLabel(k)}</p>
+                                <p class="text-sm sm:text-base ${textClass} break-words whitespace-pre-wrap">${displayVal}</p>
                             </div>`;
                         }
                     }
                 });
-                
                 gridHtml += '</div>';
 
                 if (hasData) {
                     sectionHtml += `
-                    <div class="mb-8 bg-white dark:bg-slate-800/80 rounded-2xl border border-blue-100 dark:border-slate-700 overflow-hidden shadow-sm">
-                        <div class="bg-blue-50/50 dark:bg-slate-700/50 px-4 py-3 border-b border-blue-100 dark:border-slate-600">
-                            <h3 class="font-bold text-blue-800 dark:text-blue-300 text-base">${title}</h3>
+                    <div class="mb-6 sm:mb-8 bg-white dark:bg-slate-800/80 rounded-2xl border border-blue-100 dark:border-slate-700 overflow-hidden shadow-sm w-full">
+                        <div class="bg-blue-50/50 dark:bg-slate-700/50 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-blue-100 dark:border-slate-600">
+                            <h3 class="font-bold text-blue-800 dark:text-blue-300 text-sm sm:text-base truncate">${title}</h3>
                         </div>
-                        <div class="p-4 bg-slate-50 dark:bg-slate-800/20">
+                        <div class="p-3 sm:p-4 bg-slate-50 dark:bg-slate-800/20 w-full">
                             ${gridHtml}
                         </div>
                     </div>`;
@@ -360,10 +374,8 @@
                 return sectionHtml;
             }
 
-            // Jalankan Looping Pengelompokan Data
             for (const [title, expectedKeys] of Object.entries(groupDefinitions)) {
                 if (title === "3. Status Keluarga (Anggota)") {
-                     // Filter dinamis untuk menangkap anggota_1_nama, anggota_2_nama, dll.
                      let anggotaKeys = Object.keys(data).filter(k => k.startsWith('anggota_') && !['anggota_menetap', 'anggota_luar_kk'].includes(k)).sort();
                      html += renderSection(title, anggotaKeys);
                 } else {
@@ -371,15 +383,13 @@
                 }
             }
 
-            // Tangkap sisa data yang mungkin tidak terdaftar di template (Data Lainnya)
             let leftoverKeys = Object.keys(data).filter(k => !processedKeys.has(k));
             if (leftoverKeys.length > 0) {
                 html += renderSection("Data Tambahan / Lainnya", leftoverKeys);
             }
 
             content.innerHTML = html;
-
-            // Animasi masuk modal
+            
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
@@ -387,24 +397,30 @@
             }, 10);
         }
 
-        // Tutup Modal Data
-        function closeModal() {
+        function closeModal(fromHistory = false) {
+            // Jika dipanggil oleh klik silang (bukan dari back button HP), paksa back button terpicu agar sinkron
+            if (!fromHistory && modalState === 'detail') {
+                history.back(); 
+                return;
+            }
+
+            modalState = 'none';
             const modal = document.getElementById('detailModal');
             const panel = document.getElementById('modalPanel');
-            
             modal.classList.add('opacity-0');
             panel.classList.add('translate-x-full');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
 
-        // Buka Modal Zoom Gambar
         function openImageZoom(imgUrl) {
             const zoomModal = document.getElementById('imageZoomModal');
             const zoomImg = document.getElementById('zoomedImage');
             
+            if (modalState !== 'zoom') {
+                history.pushState({ modal: 'zoom' }, '', '#zoom');
+                modalState = 'zoom';
+            }
+
             zoomImg.src = imgUrl;
             zoomModal.classList.remove('hidden');
             setTimeout(() => {
@@ -414,28 +430,33 @@
             }, 10);
         }
 
-        // Tutup Modal Zoom
-        function closeImageZoom() {
+        function closeImageZoom(fromHistory = false) {
+            if (!fromHistory && modalState === 'zoom') {
+                history.back();
+                return;
+            }
+            
+            // Kembalikan ke state '#detail' agar modal utama tidak tertutup
+            if (fromHistory && window.location.hash === '#detail') {
+                modalState = 'detail';
+            } else {
+                modalState = 'none';
+            }
+
             const zoomModal = document.getElementById('imageZoomModal');
             const zoomImg = document.getElementById('zoomedImage');
-            
             zoomModal.classList.add('opacity-0');
             zoomImg.classList.remove('scale-100');
             zoomImg.classList.add('scale-95');
-            
-            setTimeout(() => {
-                zoomModal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { zoomModal.classList.add('hidden'); }, 300);
         }
 
-        // Agar Esc bisa menutup modal
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
-                if(!document.getElementById('imageZoomModal').classList.contains('hidden')){
-                    closeImageZoom();
-                } else if(!document.getElementById('detailModal').classList.contains('hidden')){
-                    closeModal();
-                }
+        // TANGKAP TOMBOL "KEMBALI/BACK" BAWAAN HP
+        window.addEventListener('popstate', function(e) {
+            if (modalState === 'zoom') {
+                closeImageZoom(true);
+            } else if (modalState === 'detail') {
+                closeModal(true);
             }
         });
 
