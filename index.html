@@ -91,7 +91,7 @@
 
     <!-- MODAL DETAIL PENUH -->
     <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 flex justify-end">
-        <div id="modalPanel" class="bg-white dark:bg-slate-800 w-full md:w-[650px] h-full shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div id="modalPanel" class="bg-white dark:bg-slate-800 w-full md:w-[750px] h-full shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
             
             <!-- Modal Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 shadow-sm z-10">
@@ -102,7 +102,7 @@
             </div>
 
             <!-- Modal Content (Scrollable) -->
-            <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-slate-800" id="modalContent">
+            <div class="flex-1 overflow-y-auto p-6 bg-gray-100/50 dark:bg-slate-800" id="modalContent">
                 <!-- Data inject -->
             </div>
             
@@ -166,7 +166,7 @@
             .then(response => {
                 if (!response.ok) throw new Error("Jaringan bermasalah atau Server Google gagal merespons.");
                 
-                // Deteksi cerdas jika URL salah (Google mengembalikan tampilan web HTML alih-alih JSON)
+                // Deteksi cerdas jika URL salah
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
                     throw new Error("Link Apps Script salah ATAU Akses deployment Anda belum disetting 'Semua Orang' (Anyone).");
@@ -221,16 +221,18 @@
             grid.classList.remove('hidden');
 
             dataArray.forEach((item) => {
-                // Mencari field nama
                 const nama = item.nama_lengkap || item.nama || item.Nama || "Tanpa Nama";
                 const desa = item.desa || "-";
                 const noKeluarga = item.no_keluarga || "-";
                 const timestamp = item.timestamp || "-";
                 
-                // Ambil 1 foto untuk thumbnail jika ada link HTTP
+                // Cek ketersediaan foto (mendukung base64 atau http drive)
                 let thumbnail = '';
-                if(item.foto_depan_rumah && item.foto_depan_rumah.includes('http')) thumbnail = item.foto_depan_rumah;
-                else if(item.foto_ruang_tamu && item.foto_ruang_tamu.includes('http')) thumbnail = item.foto_ruang_tamu;
+                if(item.foto_depan_rumah && (item.foto_depan_rumah.includes('http') || item.foto_depan_rumah.includes('data:image'))) {
+                    thumbnail = item.foto_depan_rumah;
+                } else if(item.foto_ruang_tamu && (item.foto_ruang_tamu.includes('http') || item.foto_ruang_tamu.includes('data:image'))) {
+                    thumbnail = item.foto_ruang_tamu;
+                }
 
                 const card = document.createElement('div');
                 card.className = "bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col";
@@ -238,10 +240,8 @@
 
                 let imgHtml = '';
                 if (thumbnail) {
-                    // Tambahkan timestamp acak agar gambar dari gdrive tidak nyangkut di cache browser
-                    const t = new Date().getTime();
                     imgHtml = `<div class="h-44 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative">
-                                  <img src="${thumbnail}&t=${t}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSI+PC9wb2x5bGluZT48L3N2Zz4='">
+                                  <img src="${thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
                                   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                </div>`;
                 } else {
@@ -255,7 +255,7 @@
                             <h3 class="font-bold text-lg text-slate-800 dark:text-white line-clamp-1 pr-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${nama}</h3>
                         </div>
                         <div class="text-sm text-slate-500 dark:text-slate-400 space-y-1.5 mb-4 flex-1">
-                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> <span class="font-semibold text-slate-700 dark:text-slate-300">No. ${noKeluarga}</span></p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> <span class="font-semibold text-slate-700 dark:text-slate-300">No. Kel: ${noKeluarga}</span></p>
                             <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Desa ${desa}</p>
                             <p class="flex items-center gap-2"><svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${timestamp}</p>
                         </div>
@@ -268,7 +268,6 @@
             });
         }
 
-        // Fitur Pencarian
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filtered = globalData.filter(item => {
@@ -278,70 +277,105 @@
             renderCards(filtered);
         }
 
-        // Format Label agar rapi (cth: no_keluarga -> No Keluarga)
         function formatLabel(key) {
             return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
-        // Buka Modal & Tampilkan Detail
+        // ===============================================
+        // FUNGSI UNTUK PENGELOMPOKAN DATA DI MODAL
+        // ===============================================
         function openModal(data) {
             const modal = document.getElementById('detailModal');
             const panel = document.getElementById('modalPanel');
             const content = document.getElementById('modalContent');
             
-            document.getElementById('modalNameTitle').textContent = data.nama_lengkap || data.nama || data.Nama || "Detail Laporan Sensus";
+            document.getElementById('modalNameTitle').textContent = data.nama_lengkap || data.nama || "Detail Laporan Sensus";
 
+            // Definisi Kelompok Sesuai Kuesioner
+            const groupDefinitions = {
+                "1. Identitas Pemilik & Wilayah": ['autorize', 'desa', 'rt', 'rw', 'nama_lengkap', 'no_wa', 'berapa_keluarga', 'no_kk', 'nik_anggota', 'email'],
+                "2. Keberadaan Keluarga": ['anggota_menetap', 'anggota_luar_kk', 'jenis_usaha_keluarga', 'Bantuan'],
+                "3. Status Keluarga (Anggota)": [], // Diisi dinamis
+                "4. Pendapatan Lainnya": ['jenis_pendapatan_lain', 'asal_pendapatan_lain', 'nominal_pendapatan_lain'],
+                "5. Aset Bangunan & Tanah": ['luas_tanah_bangunan', 'luas_luar_rumah', 'nilai_aset', 'nilai_non_aset'],
+                "6. Usaha / Pendapatan": ['aktivitas_harian', 'nominal_per_bulan', 'persentase_modal', 'asal_kepemilikan', 'rekening_tujuan'],
+                "7. Identitas Usaha": ['nama_usaha', 'nama_komersial', 'alamat_usaha', 'note_keuangan', 'produksi_barang', 'kategori_jenis_usaha', 'pekerja_pria', 'pekerja_wanita'],
+                "8. Keuangan Usaha": ['total_pekerja', 'honorer_dibayar', 'biaya_honorer', 'biaya_produksi', 'biaya_operasional', 'biaya_non_operasional', 'hasil_usaha', 'luar_usaha'],
+                "9. Ekonomi & Kondisi Tempat Tinggal": ['status_bangunan', 'sertifikat', 'nilai_sewa', 'jenis_lantai', 'kondisi_lantai', 'jenis_atap', 'kondisi_atap', 'jenis_tembok', 'kondisi_tembok', 'toilet', 'akhir_tinja', 'air_minum', 'watt_listrik', 'jumlah_meteran', 'id_meteran', 'biaya_listrik', 'biaya_internet', 'biaya_makan_rokok', 'pengeluaran_rutin_bln', 'pengeluaran_tahunan'],
+                "10. Aset Pribadi": ['elpiji_3kg', 'elpiji_5_5kg', 'kulkas', 'laptop_pc', 'ac', 'emas', 'motor', 'mobil', 'estimasi_kendaraan', 'jumlah_tanah_lain', 'harga_tanah_lain', 'jumlah_bangunan_lain', 'harga_bangunan_lain', 'catatan_tambahan', 'bangunan_keluarga', 'no_keluarga'],
+                "11. Dokumentasi Foto": ['foto_ruang_tamu', 'foto_depan_rumah']
+            };
+
+            let processedKeys = new Set(['id', 'timestamp']);
             let html = '';
-            
-            // 1. Render Blok Foto Di Atas
-            const fotoKeys = Object.keys(data).filter(k => k.includes('foto'));
-            if(fotoKeys.length > 0) {
-                let fotoHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">';
-                const t = new Date().getTime(); // Anti-cache
-                fotoKeys.forEach(k => {
-                    if (data[k] && data[k].includes('http')) {
-                        fotoHtml += `
-                        <div class="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-md bg-gray-50 dark:bg-slate-900/50">
-                            <div class="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 border-b border-blue-700">
-                                <p class="text-xs font-bold text-center text-white uppercase tracking-wider">${formatLabel(k)}</p>
-                            </div>
-                            <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px]" onclick="openImageZoom('${data[k]}&t=${t}')">
-                                <img src="${data[k]}&t=${t}" class="w-full object-contain max-h-60 hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
-                            </div>
-                        </div>`;
+
+            // Fungsi render 1 blok section
+            function renderSection(title, keysToRender) {
+                let sectionHtml = '';
+                let hasData = false;
+                let gridHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+                
+                keysToRender.forEach(k => {
+                    if (data.hasOwnProperty(k)) {
+                        hasData = true;
+                        processedKeys.add(k);
+                        let val = data[k];
+                        let displayVal = (!val || String(val).trim() === '') ? '- Kosong -' : String(val);
+                        let textClass = displayVal === '- Kosong -' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
+                        
+                        // Perlakuan Khusus Untuk Foto
+                        if (title === "11. Dokumentasi Foto" && displayVal !== '- Kosong -' && (displayVal.includes('http') || displayVal.includes('data:image'))) {
+                            gridHtml += `
+                            <div class="col-span-1 md:col-span-2 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-slate-900/50">
+                                <div class="p-2 bg-gradient-to-r from-slate-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 border-b border-gray-200 dark:border-slate-600">
+                                    <p class="text-xs font-bold text-center text-slate-700 dark:text-slate-300 uppercase tracking-wider">${formatLabel(k)}</p>
+                                </div>
+                                <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px]" onclick="openImageZoom('${displayVal}')">
+                                    <img src="${displayVal}" class="w-full object-contain max-h-72 hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
+                                </div>
+                            </div>`;
+                        } else {
+                            gridHtml += `
+                            <div class="p-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-sm transition-shadow">
+                                <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">${formatLabel(k)}</p>
+                                <p class="text-sm ${textClass} break-words whitespace-pre-wrap">${displayVal}</p>
+                            </div>`;
+                        }
                     }
                 });
-                fotoHtml += '</div>';
-                // Cek jika grid foto tidak kosong
-                if(fotoHtml !== '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"></div>') {
-                    html += fotoHtml;
+                
+                gridHtml += '</div>';
+
+                if (hasData) {
+                    sectionHtml += `
+                    <div class="mb-8 bg-white dark:bg-slate-800/80 rounded-2xl border border-blue-100 dark:border-slate-700 overflow-hidden shadow-sm">
+                        <div class="bg-blue-50/50 dark:bg-slate-700/50 px-4 py-3 border-b border-blue-100 dark:border-slate-600">
+                            <h3 class="font-bold text-blue-800 dark:text-blue-300 text-base">${title}</h3>
+                        </div>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/20">
+                            ${gridHtml}
+                        </div>
+                    </div>`;
+                }
+                return sectionHtml;
+            }
+
+            // Jalankan Looping Pengelompokan Data
+            for (const [title, expectedKeys] of Object.entries(groupDefinitions)) {
+                if (title === "3. Status Keluarga (Anggota)") {
+                     // Filter dinamis untuk menangkap anggota_1_nama, anggota_2_nama, dll.
+                     let anggotaKeys = Object.keys(data).filter(k => k.startsWith('anggota_') && !['anggota_menetap', 'anggota_luar_kk'].includes(k)).sort();
+                     html += renderSection(title, anggotaKeys);
+                } else {
+                    html += renderSection(title, expectedKeys);
                 }
             }
 
-            // 2. Render Sisa Data
-            html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-            
-            // Susun dan sortir key agar terkelompok rapi
-            const keys = Object.keys(data).filter(k => !k.includes('foto') && k !== 'id');
-            keys.sort(); 
-
-            keys.forEach(key => {
-                const value = data[key];
-                const bgClass = (key.includes('catatan') || key.includes('keluhan') || key.includes('penyakit')) 
-                    ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-900/50 md:col-span-2' 
-                    : (key.includes('anggota') ? 'bg-indigo-50/50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/30 md:col-span-2' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700');
-                
-                const textClass = !value || String(value).trim() === '' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
-                const displayVal = !value || String(value).trim() === '' ? '- Kosong -' : String(value);
-
-                html += `
-                    <div class="p-4 rounded-xl border shadow-sm ${bgClass} hover:shadow-md transition-shadow">
-                        <p class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1.5 border-b border-gray-100 dark:border-slate-700 pb-1">${formatLabel(key)}</p>
-                        <p class="text-sm ${textClass} break-words whitespace-pre-wrap">${displayVal}</p>
-                    </div>
-                `;
-            });
-            html += '</div>';
+            // Tangkap sisa data yang mungkin tidak terdaftar di template (Data Lainnya)
+            let leftoverKeys = Object.keys(data).filter(k => !processedKeys.has(k));
+            if (leftoverKeys.length > 0) {
+                html += renderSection("Data Tambahan / Lainnya", leftoverKeys);
+            }
 
             content.innerHTML = html;
 
