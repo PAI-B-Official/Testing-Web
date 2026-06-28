@@ -40,11 +40,11 @@
                     <span class="font-extrabold text-xl tracking-tight text-slate-800 dark:text-white">AdminPreview<span class="text-blue-600 dark:text-blue-400">SE2026</span></span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button onclick="fetchData()" id="btnRefresh" class="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    <button onclick="fetchData()" id="btnRefresh" class="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-3 py-1.5 rounded-lg shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Segarkan Data
+                        Tarik Data
                     </button>
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors border border-transparent dark:border-slate-700">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     </button>
                 </div>
@@ -68,22 +68,22 @@
         </div>
 
         <!-- State: Loading -->
-        <div id="loadingState" class="flex flex-col items-center justify-center py-20">
+        <div id="loadingState" class="flex flex-col items-center justify-center py-20 hidden">
             <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Menarik data dari Database...</p>
+            <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Menarik data dari Spreadsheet Server...</p>
         </div>
 
         <!-- State: Empty / Error -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-            <div class="bg-gray-100 dark:bg-slate-800 p-4 rounded-full mb-4">
-                <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+        <div id="emptyState" class="flex-col items-center justify-center py-20 text-center flex">
+            <div class="bg-gray-100 dark:bg-slate-800 p-5 rounded-full mb-4 border border-gray-200 dark:border-slate-700 shadow-sm">
+                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-800 dark:text-white" id="emptyTitle">Belum ada data</h3>
-            <p class="text-slate-500 dark:text-slate-400 mt-1 max-w-md" id="emptyMessage">Data sensus yang dikirim akan muncul di sini.</p>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="emptyTitle">Data Belum Ditarik</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto" id="emptyMessage">Silakan tekan tombol "Tarik Data" di pojok kanan atas untuk memuat hasil dari Database.</p>
         </div>
 
         <!-- Grid Cards Content -->
-        <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
             <!-- Cards will be injected here -->
         </div>
 
@@ -91,10 +91,10 @@
 
     <!-- MODAL DETAIL PENUH -->
     <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 flex justify-end">
-        <div id="modalPanel" class="bg-white dark:bg-slate-800 w-full md:w-[600px] h-full shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div id="modalPanel" class="bg-white dark:bg-slate-800 w-full md:w-[650px] h-full shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
             
             <!-- Modal Header -->
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 shadow-sm z-10">
                 <h2 class="text-xl font-bold text-slate-800 dark:text-white truncate pr-4" id="modalNameTitle">Detail Responden</h2>
                 <button onclick="closeModal()" class="p-2 bg-gray-200 dark:bg-slate-700 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/50 dark:hover:text-red-400 rounded-full transition-colors focus:outline-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -102,19 +102,27 @@
             </div>
 
             <!-- Modal Content (Scrollable) -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-6" id="modalContent">
+            <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-slate-800" id="modalContent">
                 <!-- Data inject -->
             </div>
             
         </div>
     </div>
 
+    <!-- MODAL ZOOM GAMBAR -->
+    <div id="imageZoomModal" class="fixed inset-0 bg-black/90 z-[60] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0" onclick="closeImageZoom()">
+        <img id="zoomedImage" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300">
+        <button class="absolute top-6 right-6 text-white hover:text-gray-300 bg-black/50 p-2 rounded-full backdrop-blur">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
     <script>
         // ==========================================
-        // TEMPEL URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA DI SINI
-        // (URL yang sama dengan yang ada di Web Form)
+        // TEMPEL URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA DI SINI!
+        // PASTIKAN URL BERAKHIRAN /exec
         // ==========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl9EZ-lO7mYlI6unX7pBE51ltIbYrR26qWoqOJUG-PsHb_b1F3iRh7gctz49KbJApu/exec'; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwsqzju4H_SG5Au5r5eG7b-iWJsiLh4Baq0KXUZiJv00jIJ7GvIrvKoUDRkYHN1jHgv/exec'; 
 
         let globalData = [];
 
@@ -147,33 +155,47 @@
             grid.classList.add('hidden');
             
             btnRefresh.classList.add('animate-pulse');
+            btnRefresh.innerHTML = `<svg class="animate-spin w-5 h-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sedang Menarik...`;
             btnRefresh.disabled = true;
 
-            fetch(SCRIPT_URL)
-                .then(response => {
-                    if (!response.ok) throw new Error("Gagal mengambil data dari server");
-                    return response.json();
-                })
-                .then(res => {
-                    if (res.result === "success") {
-                        globalData = res.data;
-                        document.getElementById('totalData').textContent = globalData.length;
-                        renderCards(globalData);
-                    } else {
-                        throw new Error(res.message || "Gagal parsing data");
-                    }
-                })
-                .catch(err => {
-                    console.error("Fetch error:", err);
-                    document.getElementById('emptyTitle').textContent = "Terjadi Kesalahan";
-                    document.getElementById('emptyMessage').textContent = err.message;
-                    loading.classList.add('hidden');
-                    empty.classList.remove('hidden');
-                })
-                .finally(() => {
-                    btnRefresh.classList.remove('animate-pulse');
-                    btnRefresh.disabled = false;
-                });
+            // Parameter { redirect: 'follow' } WAJIB disertakan untuk menghindari Error CORS di Google Sheets
+            fetch(SCRIPT_URL, {
+                method: 'GET',
+                redirect: 'follow' 
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Jaringan bermasalah atau Server Google gagal merespons.");
+                
+                // Deteksi cerdas jika URL salah (Google mengembalikan tampilan web HTML alih-alih JSON)
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Link Apps Script salah ATAU Akses deployment Anda belum disetting 'Semua Orang' (Anyone).");
+                }
+                
+                return response.json();
+            })
+            .then(res => {
+                if (res.result === "success") {
+                    globalData = res.data;
+                    document.getElementById('totalData').textContent = globalData.length;
+                    renderCards(globalData);
+                } else {
+                    throw new Error(res.message || "Gagal memproses data dari Database");
+                }
+            })
+            .catch(err => {
+                console.error("Fetch error:", err);
+                document.getElementById('emptyTitle').textContent = "Gagal Memuat Data";
+                document.getElementById('emptyMessage').innerHTML = `<span class="text-red-500 font-bold">${err.message}</span><br>Silakan periksa kembali SCRIPT_URL dan pengaturan Deployment Anda.`;
+                loading.classList.add('hidden');
+                empty.classList.remove('hidden');
+                empty.classList.add('flex');
+            })
+            .finally(() => {
+                btnRefresh.classList.remove('animate-pulse');
+                btnRefresh.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Segarkan Data`;
+                btnRefresh.disabled = false;
+            });
         }
 
         // Render Data ke Grid
@@ -186,24 +208,26 @@
             grid.innerHTML = '';
 
             if (dataArray.length === 0) {
-                document.getElementById('emptyTitle').textContent = "Belum ada data";
-                document.getElementById('emptyMessage').textContent = "Data sensus yang dikirim akan muncul di sini.";
+                document.getElementById('emptyTitle').textContent = "Database Masih Kosong";
+                document.getElementById('emptyMessage').textContent = "Belum ada satupun responden yang tersimpan di dalam Sheet DATA 2026.";
                 empty.classList.remove('hidden');
+                empty.classList.add('flex');
                 grid.classList.add('hidden');
                 return;
             }
 
             empty.classList.add('hidden');
+            empty.classList.remove('flex');
             grid.classList.remove('hidden');
 
-            dataArray.forEach((item, index) => {
-                // Mencari field nama dari key yang mengandung "nama" atau "nama_lengkap"
+            dataArray.forEach((item) => {
+                // Mencari field nama
                 const nama = item.nama_lengkap || item.nama || item.Nama || "Tanpa Nama";
                 const desa = item.desa || "-";
                 const noKeluarga = item.no_keluarga || "-";
                 const timestamp = item.timestamp || "-";
                 
-                // Ambil 1 foto untuk thumbnail jika ada
+                // Ambil 1 foto untuk thumbnail jika ada link HTTP
                 let thumbnail = '';
                 if(item.foto_depan_rumah && item.foto_depan_rumah.includes('http')) thumbnail = item.foto_depan_rumah;
                 else if(item.foto_ruang_tamu && item.foto_ruang_tamu.includes('http')) thumbnail = item.foto_ruang_tamu;
@@ -214,26 +238,29 @@
 
                 let imgHtml = '';
                 if (thumbnail) {
-                    imgHtml = `<div class="h-40 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative">
-                                  <img src="${thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    // Tambahkan timestamp acak agar gambar dari gdrive tidak nyangkut di cache browser
+                    const t = new Date().getTime();
+                    imgHtml = `<div class="h-44 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative">
+                                  <img src="${thumbnail}&t=${t}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSI+PC9wb2x5bGluZT48L3N2Zz4='">
+                                  <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                </div>`;
                 } else {
-                    imgHtml = `<div class="h-20 w-full bg-gradient-to-r from-blue-500 to-indigo-600"></div>`;
+                    imgHtml = `<div class="h-16 w-full bg-gradient-to-r from-blue-600 to-indigo-700"></div>`;
                 }
 
                 card.innerHTML = `
                     ${imgHtml}
-                    <div class="p-5 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col relative">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${nama}</h3>
-                            <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs font-bold px-2.5 py-1 rounded border border-blue-200 dark:border-blue-800 shrink-0">Kel: ${noKeluarga}</span>
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white line-clamp-1 pr-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${nama}</h3>
                         </div>
-                        <div class="text-sm text-slate-500 dark:text-slate-400 space-y-1 mb-4 flex-1">
-                            <p class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Desa ${desa}</p>
-                            <p class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${timestamp}</p>
+                        <div class="text-sm text-slate-500 dark:text-slate-400 space-y-1.5 mb-4 flex-1">
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> <span class="font-semibold text-slate-700 dark:text-slate-300">No. ${noKeluarga}</span></p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Desa ${desa}</p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ${timestamp}</p>
                         </div>
-                        <div class="pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-sm font-medium text-blue-600 dark:text-blue-400">
-                            Buka Rincian <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <div class="pt-4 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-sm font-bold text-blue-600 dark:text-blue-400">
+                            Buka Laporan Penuh <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </div>
                 `;
@@ -262,64 +289,71 @@
             const panel = document.getElementById('modalPanel');
             const content = document.getElementById('modalContent');
             
-            document.getElementById('modalNameTitle').textContent = data.nama_lengkap || data.nama || data.Nama || "Detail Data";
+            document.getElementById('modalNameTitle').textContent = data.nama_lengkap || data.nama || data.Nama || "Detail Laporan Sensus";
 
             let html = '';
             
-            // Render Foto Terlebih Dahulu (Jika Ada)
+            // 1. Render Blok Foto Di Atas
             const fotoKeys = Object.keys(data).filter(k => k.includes('foto'));
             if(fotoKeys.length > 0) {
-                let fotoHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">';
+                let fotoHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">';
+                const t = new Date().getTime(); // Anti-cache
                 fotoKeys.forEach(k => {
                     if (data[k] && data[k].includes('http')) {
                         fotoHtml += `
-                        <div class="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-slate-900/50">
-                            <div class="p-2 bg-gray-100 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
-                                <p class="text-xs font-bold text-center text-slate-600 dark:text-slate-300 uppercase tracking-wider">${formatLabel(k)}</p>
+                        <div class="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-md bg-gray-50 dark:bg-slate-900/50">
+                            <div class="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 border-b border-blue-700">
+                                <p class="text-xs font-bold text-center text-white uppercase tracking-wider">${formatLabel(k)}</p>
                             </div>
-                            <img src="${data[k]}" class="w-full object-contain max-h-60 bg-black" loading="lazy">
+                            <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px]" onclick="openImageZoom('${data[k]}&t=${t}')">
+                                <img src="${data[k]}&t=${t}" class="w-full object-contain max-h-60 hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
+                            </div>
                         </div>`;
                     }
                 });
                 fotoHtml += '</div>';
-                if(fotoHtml !== '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"></div>') {
+                // Cek jika grid foto tidak kosong
+                if(fotoHtml !== '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"></div>') {
                     html += fotoHtml;
                 }
             }
 
-            // Render Sisa Data
-            html += '<div class="space-y-4">';
-            for (const [key, value] of Object.entries(data)) {
-                if (key.includes('foto') || key === 'id') continue; // Skip id dan foto karena sdh di atas
+            // 2. Render Sisa Data
+            html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+            
+            // Susun dan sortir key agar terkelompok rapi
+            const keys = Object.keys(data).filter(k => !k.includes('foto') && k !== 'id');
+            keys.sort(); 
 
-                const bgClass = (key.includes('catatan') || key.includes('keluhan')) 
-                    ? 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-900/50' 
-                    : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700';
+            keys.forEach(key => {
+                const value = data[key];
+                const bgClass = (key.includes('catatan') || key.includes('keluhan') || key.includes('penyakit')) 
+                    ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-900/50 md:col-span-2' 
+                    : (key.includes('anggota') ? 'bg-indigo-50/50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/30 md:col-span-2' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700');
                 
-                const textClass = !value || value.trim() === '' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
-                const displayVal = !value || value.trim() === '' ? '-Kosong-' : value;
+                const textClass = !value || String(value).trim() === '' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
+                const displayVal = !value || String(value).trim() === '' ? '- Kosong -' : String(value);
 
                 html += `
-                    <div class="p-4 rounded-xl border shadow-sm ${bgClass}">
-                        <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">${formatLabel(key)}</p>
+                    <div class="p-4 rounded-xl border shadow-sm ${bgClass} hover:shadow-md transition-shadow">
+                        <p class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1.5 border-b border-gray-100 dark:border-slate-700 pb-1">${formatLabel(key)}</p>
                         <p class="text-sm ${textClass} break-words whitespace-pre-wrap">${displayVal}</p>
                     </div>
                 `;
-            }
+            });
             html += '</div>';
 
             content.innerHTML = html;
 
-            // Animasi masuk
+            // Animasi masuk modal
             modal.classList.remove('hidden');
-            // Sedikit delay untuk memicu CSS transition
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 panel.classList.remove('translate-x-full');
             }, 10);
         }
 
-        // Tutup Modal
+        // Tutup Modal Data
         function closeModal() {
             const modal = document.getElementById('detailModal');
             const panel = document.getElementById('modalPanel');
@@ -332,8 +366,45 @@
             }, 300);
         }
 
-        // Jalankan saat pertama dimuat
-        document.addEventListener('DOMContentLoaded', fetchData);
+        // Buka Modal Zoom Gambar
+        function openImageZoom(imgUrl) {
+            const zoomModal = document.getElementById('imageZoomModal');
+            const zoomImg = document.getElementById('zoomedImage');
+            
+            zoomImg.src = imgUrl;
+            zoomModal.classList.remove('hidden');
+            setTimeout(() => {
+                zoomModal.classList.remove('opacity-0');
+                zoomImg.classList.remove('scale-95');
+                zoomImg.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Tutup Modal Zoom
+        function closeImageZoom() {
+            const zoomModal = document.getElementById('imageZoomModal');
+            const zoomImg = document.getElementById('zoomedImage');
+            
+            zoomModal.classList.add('opacity-0');
+            zoomImg.classList.remove('scale-100');
+            zoomImg.classList.add('scale-95');
+            
+            setTimeout(() => {
+                zoomModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Agar Esc bisa menutup modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                if(!document.getElementById('imageZoomModal').classList.contains('hidden')){
+                    closeImageZoom();
+                } else if(!document.getElementById('detailModal').classList.contains('hidden')){
+                    closeModal();
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
