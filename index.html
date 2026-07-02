@@ -130,7 +130,7 @@
         // ==========================================
         // TEMPEL URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA DI SINI!
         // ==========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwsqzju4H_SG5Au5r5eG7b-iWJsiLh4Baq0KXUZiJv00jIJ7GvIrvKoUDRkYHN1jHgv/exec'; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweGyh3fm4yPwy7fRoRE659_LKgRTsF7UJIgbJ6mza6LeiE8NMvY2sdWE-xrxSQmOwi/exec'; 
 
         let globalData = [];
 
@@ -149,6 +149,24 @@
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
             }
+        }
+
+        // ==========================================
+        // FUNGSI KONVERSI LINK GOOGLE DRIVE KE DIRECT LINK
+        // Ini memastikan gambar bisa terbuka sempurna tanpa ditolak browser
+        // ==========================================
+        function convertToDirectLink(url) {
+            if (!url) return "";
+            if (String(url).includes("data:image")) return url; // Cek bila itu Base64 asli
+            if (String(url).includes("lh3.googleusercontent.com/d/")) return url;
+            
+            // Konversi link Drive (drive.google.com/file/d/...) menjadi lh3
+            const idRegex = /[-\w]{25,}/;
+            const match = String(url).match(idRegex);
+            if (match && match[0]) {
+                return "https://lh3.googleusercontent.com/d/" + match[0];
+            }
+            return url;
         }
 
         // Fetch Data from Google Sheets
@@ -228,14 +246,10 @@
                 const nama = item.nama_lengkap || item.nama || item.Nama || "Tanpa Nama";
                 const desa = item.desa || "-";
                 const noKeluarga = item.no_keluarga || "-";
-                const timestamp = item.timestamp ? item.timestamp.split(' ')[0] : "-";
+                const timestamp = item.timestamp ? String(item.timestamp).split(' ')[0] : "-";
                 
-                let thumbnail = '';
-                if(item.foto_depan_rumah && (item.foto_depan_rumah.includes('http') || item.foto_depan_rumah.includes('data:image'))) {
-                    thumbnail = item.foto_depan_rumah;
-                } else if(item.foto_ruang_tamu && (item.foto_ruang_tamu.includes('http') || item.foto_ruang_tamu.includes('data:image'))) {
-                    thumbnail = item.foto_ruang_tamu;
-                }
+                let rawThumbnail = item.foto_depan_rumah || item.foto_ruang_tamu || '';
+                let thumbnail = convertToDirectLink(rawThumbnail);
 
                 const card = document.createElement('div');
                 card.className = "bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col";
@@ -243,9 +257,8 @@
 
                 let imgHtml = '';
                 if (thumbnail) {
-                    const t = new Date().getTime(); // Anti-cache
                     imgHtml = `<div class="h-40 sm:h-44 w-full overflow-hidden bg-gray-200 dark:bg-slate-700 relative shrink-0">
-                                  <img src="${thumbnail}&t=${t}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSI+PC9wb2x5bGluZT48L3N2Zz4='">
+                                  <img src="${thumbnail}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNSAyMSI+PC9wb2x5bGluZT48L3N2Zz4='">
                                   <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                </div>`;
                 } else {
@@ -284,7 +297,6 @@
         function formatLabel(key) {
             return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
-
 
         // ===============================================
         // SISTEM NAVIGASI ANTI-TUTUP (HISTORY API) & MODAL
@@ -325,7 +337,6 @@
             function renderSection(title, keysToRender) {
                 let sectionHtml = '';
                 let hasData = false;
-                // Grid dirubah agar di HP hanya 1 kolom, di tablet/PC 2 kolom agar tidak bertabrakan
                 let gridHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full">';
                 
                 keysToRender.forEach(k => {
@@ -336,20 +347,20 @@
                         let displayVal = (!val || String(val).trim() === '') ? '- Kosong -' : String(val);
                         let textClass = displayVal === '- Kosong -' ? 'text-gray-400 italic' : 'text-slate-800 dark:text-gray-100 font-medium';
                         
-                        // Render Gambar
-                        if (title === "11. Dokumentasi Foto" && displayVal !== '- Kosong -' && (displayVal.includes('http') || displayVal.includes('data:image'))) {
-                            const t = new Date().getTime(); // Anti-cache
+                        // JIKA FOTO DITEMUKAN: Render sebagai Gambar Langsung
+                        if (title === "11. Dokumentasi Foto" && displayVal !== '- Kosong -') {
+                            let imgUrl = convertToDirectLink(displayVal); // Trik Konversi Otomatis
+                            
                             gridHtml += `
                             <div class="col-span-1 md:col-span-2 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-slate-900/50 w-full">
                                 <div class="p-2 sm:p-3 bg-gradient-to-r from-slate-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 border-b border-gray-200 dark:border-slate-600">
                                     <p class="text-xs sm:text-sm font-bold text-center text-slate-700 dark:text-slate-300 uppercase tracking-wider">${formatLabel(k)}</p>
                                 </div>
-                                <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px] sm:min-h-[200px] w-full p-2" onclick="openImageZoom('${displayVal}&t=${t}')">
-                                    <img src="${displayVal}&t=${t}" class="max-w-full max-h-60 sm:max-h-72 object-contain hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
+                                <div class="cursor-pointer bg-black flex items-center justify-center min-h-[150px] sm:min-h-[200px] w-full p-2" onclick="openImageZoom('${imgUrl}')">
+                                    <img src="${imgUrl}" class="max-w-full max-h-60 sm:max-h-72 object-contain hover:opacity-80 transition-opacity" loading="lazy" title="Klik untuk perbesar">
                                 </div>
                             </div>`;
                         } else {
-                            // Render Teks (Diberi break-words agar teks panjang memotong ke bawah, bukan menyamping menabrak kotak)
                             gridHtml += `
                             <div class="p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-sm transition-shadow min-w-0 w-full overflow-hidden">
                                 <p class="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1.5 truncate">${formatLabel(k)}</p>
@@ -436,7 +447,6 @@
                 return;
             }
             
-            // Kembalikan ke state '#detail' agar modal utama tidak tertutup
             if (fromHistory && window.location.hash === '#detail') {
                 modalState = 'detail';
             } else {
